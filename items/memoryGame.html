@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+
+            html, body{margin: 0; padding:0; height: 100%;}
+
+            body{overflow: hidden; -ms-overflow-style: none;}
+            ::-webkit-scrollbar{display: none;}
+
+            /* 공통start */
+            .cf:after{
+                content: '';
+                display: block;
+                clear: both;
+            }
+            .none{display: none;}
+            /* 공통end */
+
+            header{
+                padding: 10px;
+                box-sizing: border-box;
+            }
+            header h1{
+                float: left;
+                margin: 0;
+                padding: 0;
+                text-shadow: 5px 5px 8px blue;
+                color: #eee;
+            }
+            header div{
+                float: right;
+            }
+            header button{
+                background: blue;
+                border: 0;
+                outline: 0;
+                height: auto;
+                color: #fff;
+                padding: 10px;
+                border-radius: 5px;
+                width: 80px;
+                cursor: pointer;
+                font-weight: 900;
+            }
+
+            .btn-init{background: red;}
+
+            .btn-submit.no-click{cursor: not-allowed;}
+
+            .sizes {
+                padding: 10px;
+            }
+            .sizes input{
+                display: none;
+            }
+
+            .sizes span{
+                display: inline-block;
+                padding: 10px;
+                width: 35px;
+                background: #ddd;
+                border-radius: 5px;
+                transition: .5s;
+                text-align: center;
+                font-size: 12px;
+                cursor: pointer;
+                font-weight: 900;
+            }
+
+            .sizes input[name="size2"] + span{cursor: not-allowed;}
+            
+            .sizes input:checked + span{
+                background: blue;
+                color: #fff;
+            }
+            .board-q{
+                position: fixed;
+                height: 100vh;
+                background: #fff;
+                width: 100%;
+                top: 0;
+                left: 0;
+            }
+            .board-q .board,
+            .board-a .board{
+                width: 600px;
+                height: 600px;
+                background: #fff;
+                margin: 20px auto;
+                display: grid;
+                padding: 5px;
+                gap: 5px;
+                box-sizing: border-box;
+                border-radius: 5px;
+            }
+
+            .board-q .board > div, .board-a .board > div{background: #fff; border-radius: 5px; box-shadow: inset 0 0 5px #00000080; transition: background 1s;}
+            .board-a .board > div{cursor: pointer;}
+            .board-q .board > div.active, .board-a .board > div.active{background: blue;}
+            .board-a .board > div.red{background: red;}
+            .board-a .board > div.yellow{background: yellow;}
+            .board-a .board > div.green{background: green;}
+
+            .board-a .board > div.no-click{
+                cursor: not-allowed;
+            }
+
+            .grid4x4{grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr);}
+            .grid5x5{grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr);}
+            .grid6x6{grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 1fr);}
+            .grid7x7{grid-template-columns: repeat(7, 1fr); grid-template-rows: repeat(7, 1fr);}
+            .grid8x8{grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr);}
+
+            .board-a{
+                margin-top: 100vh;
+                width: 100%;
+                height: 100%;
+                position: relative;
+                z-index: 1;
+                box-shadow: 0 -1px 5px #00000080;
+                background: #000;
+            }
+
+            .board-a .board{
+                background: #000;
+            }
+
+            .layer{
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 2;
+            }
+
+            @media (max-width: 650px),
+            (max-height: 750px){
+                .board-q .board,
+                .board-a .board{
+                    width: 500px;
+                    height: 500px;
+                }
+            }
+            @media (max-width: 550px),
+            (max-height: 650px){
+                .board-q .board,
+                .board-a .board{
+                    width: 400px;
+                    height: 400px;
+                }
+            }
+            @media (max-width: 450px),
+            (max-height: 550px){
+                .board-q .board,
+                .board-a .board{
+                    width: 300px;
+                    height: 300px;
+                }
+            }
+        </style>
+	</head>
+	<body>
+        <aside id="layer" class="layer none"></aside>
+        <section class="board-q">
+            <header class="cf">
+                <h1>MEMORY TEST</h1>
+                <div>
+                    <button id="btn_start">시작</button>
+                </div>
+            </header>
+            <article class="sizes">
+                <label>
+                    <input type="radio" name="size" value="4" checked />
+                    <span>4 * 4</span>
+                </label>
+                <label>
+                    <input type="radio" name="size" value="5" />
+                    <span>5 * 5</span>
+                </label>
+                <label>
+                    <input type="radio" name="size" value="6" />
+                    <span>6 * 6</span>
+                </label>
+                <label>
+                    <input type="radio" name="size" value="7" />
+                    <span>7 * 7</span>
+                </label>
+                <label>
+                    <input type="radio" name="size" value="8" />
+                    <span>8 * 8</span>
+                </label>
+            </article>
+            <article id="board_q" class="board grid4x4"></article>
+        </section>
+        <section class="board-a">
+            <header class="cf">
+                <div>
+                    <button id="btn_init" class="btn-init">초기화</button>
+                    <button id="btn_submit" class="btn-submit">제출</button>
+                </div>
+            </header>
+            <article class="sizes">
+                <label>
+                    <input type="radio" name="size2" value="4" disabled checked />
+                    <span>4 * 4</span>
+                </label>
+                <label>
+                    <input type="radio" name="size2" value="5" disabled />
+                    <span>5 * 5</span>
+                </label>
+                <label>
+                    <input type="radio" name="size2" value="6" disabled />
+                    <span>6 * 6</span>
+                </label>
+                <label>
+                    <input type="radio" name="size2" value="7" disabled />
+                    <span>7 * 7</span>
+                </label>
+                <label>
+                    <input type="radio" name="size2" value="8" disabled />
+                    <span>8 * 8</span>
+                </label>
+            </article>
+            <article id="board_a" class="board grid4x4"></article>
+        </section>
+        <script>
+            window.onload = function(){
+                window.scrollTo(0, 0);
+
+                const size_q = document.querySelectorAll('.sizes input[name="size"]');
+                const board_q = document.querySelector('#board_q');
+                const board_a = document.querySelector('#board_a');
+                const size_a = document.querySelectorAll('.sizes [name="size2"]');
+                const layer = document.querySelector('#layer');
+                const body = document.body;
+
+                let activeBlocks = [];
+
+                const activeCnt = {
+                    4: {mn: 5, mx: 10},//16
+                    5: {mn: 10, mx: 15},  //25
+                    6: {mn: 15, mx: 20},  //36
+                    7: {mn: 20, mx: 30},  //49
+                    8: {mn: 30, mx: 35},  //64
+                }
+
+                const sizeClasses = ['grid4x4', 'grid5x5', 'grid6x6', 'grid7x7', 'grid8x8'];
+
+                size_q.forEach((el) => {
+                    el.addEventListener('change', function(){
+                        const val = el.value;
+                        const className = 'grid' + val + 'x' + val;
+
+                        sizeClasses.forEach((classNm) => {
+                            board_q.classList.remove(classNm);
+                            board_a.classList.remove(classNm);
+                        });
+
+                        size_a.forEach((input) => {
+                            input.checked = false;
+                            if(input.value == val) input.checked = true;
+                        })
+
+                        board_q.innerHTML = '';
+                        board_q.classList.add(className);
+                        board_a.innerHTML = '';
+                        board_a.classList.add(className);
+
+
+                        for(let i = 0; i < val * val; i++){
+                            const block = document.createElement('DIV');
+                            const block2 = document.createElement('DIV');
+                            block.setAttribute('data-idx', i);
+                            block2.setAttribute('data-idx', i);
+
+                            block2.addEventListener('click', () => {
+                                if(block2.classList.contains('no-click')) return;
+                                block2.classList.toggle('active');
+                            });
+
+                            board_q.appendChild(block);
+                            board_a.appendChild(block2);
+                        }
+                    })
+                });
+
+                const startBtn = document.querySelector('#btn_start');
+                startBtn.addEventListener('click', () => {
+                    layer.classList.remove('none');
+                    gameStart();
+                    setTimeout(() => {
+                        body.style.overflow = 'auto';
+                        scrollAnimate('down');
+                    }, 3000);
+                });
+
+                const initBtn = document.querySelector('#btn_init');
+                initBtn.addEventListener('click', () => {
+                    if(confirm('초기화하시겠습니까?')){
+                        window.scrollTo(0, 0);
+                        location.reload();
+                    }
+                });
+                
+                const submitBtn = document.querySelector('#btn_submit');
+                submitBtn.addEventListener('click', () => {
+                    if(submitBtn.classList.contains('no-click')) return;
+
+                    const answerIdx = [];
+                    const answerBlock = document.querySelectorAll('#board_a > div.active');
+                    const answerAllBlock = document.querySelectorAll('#board_a > div');
+
+                    answerAllBlock.forEach((block) => {block.classList.add('no-click');});  //모든블럭 클릭 방지
+                    submitBtn.classList.add('no-click');
+                    
+                    answerBlock.forEach((block) => {
+                        const val = block.getAttribute('data-idx');
+                        answerIdx.push(+val);
+                        block.classList.add('red');
+                    });
+
+                    console.log(activeBlocks);
+
+                    activeBlocks.forEach((blockIdx) => {
+                        const activeBlock = document.querySelector('#board_a > div[data-idx="' + blockIdx + '"]');
+                        activeBlock.classList.add('yellow');
+                    })
+                    
+                    const matchArr = activeBlocks.filter(a => answerIdx.includes(a));
+                    matchArr.forEach((matchedIdx) => {
+                        const activeBlock = document.querySelector('#board_a > div[data-idx="' + matchedIdx + '"]');
+                        activeBlock.classList.add('green');
+                    })
+
+                    console.log(matchArr.length, answerBlock.length);
+
+                    if(matchArr.length == activeBlocks.length){
+                        setTimeout(function(){
+                            alert('축하합니다.\n다 맞추셨습니다.');
+                        }, 1000)
+                    }
+                });
+                
+                function scrollAnimate(dir){
+                    const timeout = setTimeout(function(){
+                        const dir2 = dir == 'up' ? -1 : 1;
+                        const thisScroll = window.scrollY;
+                        window.scrollTo(0, (thisScroll + (dir2 * 5)));
+                        const afterScroll = window.scrollY;
+                        if(Math.ceil(afterScroll) < document.body.scrollHeight){
+                            return scrollAnimate(dir);
+                        }else{
+                            clearTimeout(timeout)
+                            body.style.overflow = 'hidden';
+                            layer.classList.add('none');
+                        };
+                    });
+                }
+
+                function gameStart() {
+                    const size = document.querySelector('.sizes input[name="size"]:checked').value;
+                    const activeCnt2 = getRandomBetween(activeCnt[size].mn, activeCnt[size].mx);
+
+                    const allBlocks = [];
+                    for(let i = 0; i < size**2; i++){
+                        allBlocks.push(i);
+                    }
+
+                    const activeBlocks2 = shuffleArr(allBlocks, activeCnt2);
+                    activeBlocks = activeBlocks2;
+                    
+                    activeBlocks2.forEach((acitveBlock) => {
+                        const target = document.querySelector('#board_q > div[data-idx="' + acitveBlock + '"]');
+                        target.classList.add('active');
+                    })
+                }
+
+                function getRandomBetween (mn, mx){
+                    if(isNaN(mn) || isNaN(mx) || mn >= mx) return;
+                    return Math.floor(Math.random() * (mx - mn + 1)) + mn;
+                }
+
+                function shuffleArr (arr, cnt){
+                    const forCnt = cnt || arr.length;
+                    const tmpArr = [];
+                    for(let i = 0; i < forCnt; i++){
+                        const rdmIdx = getRandomBetween(0, arr.length - 1);
+                        tmpArr.push(arr.splice(rdmIdx, 1)[0]);
+                    }
+
+                    return tmpArr;
+                }
+
+                let event = new Event('change');
+                size_q[0].dispatchEvent(event);
+            }
+        </script>
+		
+		
+	</body>
+</html>

@@ -1,0 +1,265 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<style>
+			.digital{
+				width: 300px; margin: 50px auto;
+				display: flex; justify-content: center;
+				padding: 10px; box-sizing: border-box;
+				gap: 10px; align-items: center;
+			}
+			.digital > div{display: flex; align-items: center; gap: 5px;}
+			.number{display: inline-flex; width: 28px; gap: 2px; flex-wrap: wrap;}
+			.colon{display: inline-flex; width: 8px; gap: 2px; flex-wrap: wrap;}
+			.colon > div{width: 8px; height: 8px; box-sizing: border-box; }
+			.colon > div:nth-child(2n){box-shadow: 0 0 5px #ff0000; transform: scale(0); transition: .5s; background: linear-gradient(45deg, #ffffff80, #f00);}
+			.number > div{
+				width: 8px; height: 8px; box-sizing: border-box; transition: .5s; transform: scale(0); box-shadow: 0 0 5px #ff0000; background: linear-gradient(45deg, #ffffff80, #f00);
+			}
+
+		</style>
+	</head>
+	<body>
+		<div id="digital" class="digital">
+			<div id="hour" class="hour">
+				<div class="number">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+				<div class="number">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+			<div class="colon">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+			<div id="minute" class="minute">
+				<div class="number">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+				<div class="number">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+			<div class="colon">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+			<div id="second" class="second">
+				<div class="number">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+				<div class="number">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			let nowTime = {
+				h0: '',
+				h1: '',
+				m0: '',
+				m1: '',
+				s0: '',
+				s1: ''
+			}
+
+			const digitalTag = document.querySelector('#digital');
+
+			const numberObj = {
+				0: [0,1,2,5,8,11,14,13,12,9,6,3],
+				1: [2,5,8,11,14],
+				2: [0,1,2,5,8,7,6,9,12,13,14],
+				3: [0,1,2,5,8,11,14,13,12,6,7],
+				4: [0,3,6,7,2,5,8,11,14],
+				5: [2,1,0,3,6,7,8,11,14,13,12],
+				6: [2,1,0,3,6,9,12,13,14,11,8,7],
+				7: [0,1,2,5,8,11,14],
+				8: [0,1,2,5,8,11,14,13,12,9,6,3,7],
+				9: [7,6,3,0,1,2,5,8,11,14,13,12],
+			}
+
+			setInterval(() => {
+				const now = new Date();
+
+				let h = now.getHours();
+				let m = now.getMinutes();
+				let s = now.getSeconds();
+				const ms = now.getMilliseconds();
+
+				h = addZero(h, 2);
+				m = addZero(m, 2);
+				s = addZero(s, 2);
+
+				const hTag = document.querySelector('#hour');
+				const mTag = document.querySelector('#minute');
+				const sTag = document.querySelector('#second');
+
+				//초기화
+				for(let i = 0; i < 2; i++){
+					if(nowTime['h' + i] != h[i]){
+						document.querySelectorAll('#hour > .number')[i].querySelectorAll(':scope > div').forEach(function(el){
+							el.style.transform = 'scale(0)';
+						})
+					}
+					if(nowTime['m' + i] != m[i]){
+						document.querySelectorAll('#minute > .number')[i].querySelectorAll(':scope > div').forEach(function(el){
+							el.style.transform = 'scale(0)';
+						})
+					}
+
+					if(nowTime['s' + i] != s[i]){
+						document.querySelectorAll('#second > .number')[i].querySelectorAll(':scope > div').forEach(function(el){
+							el.style.transform = 'scale(0)';
+						})
+					}
+				}
+
+				//document.querySelectorAll('.number > div').forEach(function(el){
+				//	el.style.transform = 'scale(0)';
+				//})
+				document.querySelectorAll('.colon > div').forEach(function(el){
+					el.style.transform = 'scale(0)';
+				});
+
+				for(let i = 0; i < 2; i++){
+					const htag2 = hTag.querySelectorAll(':scope > div')[i];
+					const mtag2 = mTag.querySelectorAll(':scope > div')[i];
+					const stag2 = sTag.querySelectorAll(':scope > div')[i];
+
+					numberObj[h[i]].forEach((el, idx) => {
+						setTimeout(function(){
+							htag2.querySelectorAll(':scope > div')[el].style.transform = 'scale(1)';
+						}, 50 * idx);
+					})
+					numberObj[m[i]].forEach((el, idx) => {
+						setTimeout(function(){
+							mtag2.querySelectorAll(':scope > div')[el].style.transform = 'scale(1)';
+						}, 50 * idx);
+					})
+					numberObj[s[i]].forEach((el, idx) => {
+						setTimeout(function(){
+							stag2.querySelectorAll(':scope > div')[el].style.transform = 'scale(1)';
+						}, 50 * idx);
+					})
+					
+					nowTime['m' + i] = m[i];
+					nowTime['s' + i] = s[i];
+					nowTime['h' + i] = h[i];
+				}
+
+
+				document.querySelectorAll('.colon > div').forEach(function(el){
+					setTimeout(function(){
+						el.style.transform = 'scale(1)';
+					}, 500);
+				});
+
+			}, 1000);
+
+
+			function addZero(value, len) {
+				const strValue = value + '';
+
+				let rtnVal = '';
+
+				for(let i = 0; i < (len - strValue.length); i++) rtnVal += '0';
+
+				rtnVal += strValue;
+				return rtnVal;
+			}
+
+		</script>
+	<body>
+</html>

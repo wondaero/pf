@@ -1,0 +1,480 @@
+html, body{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #111;
+}
+
+/*공통*/
+.main-color1{color: #ffb400!important;}
+
+.none{display: none;}
+
+label.ro-checkbox1 > *,
+label.ro-radio1 > *{
+    vertical-align: middle;
+}
+label.ro-checkbox1 input,
+label.ro-radio1 input{
+    display: none;
+}
+label.ro-checkbox1 i{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ddd;
+    position: relative;
+}
+
+label.ro-checkbox1 i:before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0px;
+    height: 0px;
+    display: block;
+    transform: rotate(-45deg);
+    border-left: 3px  solid red;
+    border-bottom: 3px  solid red;
+    opacity: 0;
+    transition: height .05s, top .05s, width .05s ease-in .1s, left .05s ease-in .1s;
+}
+
+label.ro-checkbox1 input:checked + i:before{
+    top: -10px;
+    left: -3px;
+    width: 25px;
+    height: 15px;
+    opacity: 1;
+}
+
+label.ro-radio1 i{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ddd;
+    position: relative;
+    border-radius: 20px;
+    box-shadow: border-box;
+}
+
+label.ro-radio1 i:before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 25px;
+    transform: scale(1);
+    border: 1px solid #f00;
+    opacity: 0;
+}
+
+label.ro-radio1 i:after{
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    margin: 0;
+    display: block;
+    border-radius: 25px;
+    background: #f00;
+    transform: scale(1);
+    opacity: 0;
+}
+
+label.ro-radio1 input:checked + i:before{
+    transform: scale(1.5);
+    opacity: 1;
+    transition: 0.05s;
+}
+
+label.ro-radio1 input:checked + i:after{
+    opacity: 1;
+    width: 12px;
+    height: 12px;
+    margin: -6px 0 0 -6px;
+    transition: all .05s ease-in .3s;
+}
+
+.wrapper{
+    width: 100%;
+    height: 100%;
+}
+
+.wrapper > .page{
+    position: absolute;
+    top: -100%;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background: #111;
+    overflow-y: auto;
+}
+
+.wrapper > .page.on{
+    opacity: 1;
+    top: 0;
+    transition: top .5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 1;
+}
+
+nav{
+    position: fixed;
+    top: 0;
+    right: 30px;
+    height: 100%;
+    z-index: 1;
+}
+
+nav ul{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    justify-content: center;
+}
+
+nav ul li{
+    border-radius: 50%;
+    background: #2b2a2a;
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: all .2s;
+}
+nav ul li:hover, nav ul li.on{
+    background: #ffb400;
+}
+
+nav ul li .nav-text{
+    white-space: nowrap;
+    opacity: 0;
+    width: 50px;
+    position: absolute;
+    border-radius: 50px;
+    background: #ffb400;
+    color: #fff;
+    top: 0;
+    right: 0;
+    transition: all .2s;
+    text-align: left;
+    padding: 0 20px;
+    z-index: -1;
+    width: auto;
+}
+nav ul li:hover .nav-text{
+    opacity: 1;
+    padding-right: 60px;
+}
+
+.page-home{
+    background: linear-gradient(75deg, #ffb400 22%, #111 0)!important;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 30px;
+    padding-right: 110px;
+    justify-content: flex-start;
+    gap: 10%;
+}
+
+.page-home .img-home{
+    border-radius: 30px;
+    box-shadow: 0 0 5px #00000080;
+    width: 30%;
+    height: 90%;
+    background: #fff;
+    flex: 0 0 auto;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    background: #111 url(https://cdn.pixabay.com/photo/2018/08/28/13/29/avatar-3637561_960_720.png) no-repeat center 100px / cover;
+    
+
+}
+
+.text-home{
+    width: 50%;
+}
+
+.text-home h1{
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.text-home p{
+    font-size: 20px;
+    color: #444;
+}
+
+
+.page-about-me{
+    padding-top: 50px;
+    position: relative;
+}
+.page-title{
+    text-align: center;
+    color: #fff;
+    position: relative;
+    margin: 30px 0;
+    height: 120px;
+}
+
+.page-title h1{
+    font-size: 110px;
+    color: #ffffff12;
+}
+.page-title h4{
+    font-size: 56px;
+    font-weight: 900;
+}
+
+.page-title > *{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.me-personal{
+    margin-bottom: 50px;
+}
+.me-personal h3{
+    color: #fff;
+    margin-bottom: 10px;
+}
+.me-personal ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: #fff;
+}
+.me-personal ul span{
+    opacity: .8;
+}
+
+.me-hr{
+    border-color: #ffffff40;
+    max-width: 40%;
+    margin: 0 auto 50px;
+}
+
+.item-sub-title{
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffffffcc;
+}
+
+.item-list{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 100px;
+}
+
+.item-list ul{
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    width: 100%;
+    gap: 30px 30px;
+    flex-wrap: wrap;
+    flex-direction: row;
+    list-style: none;
+    justify-content: flex-start;
+}
+
+.item-list ul li{
+    flex: 0 1 30%;
+    min-width: 280px;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 5px;
+}
+.item-list ul li a{
+    text-decoration: none;
+    display: block;
+}
+.item-list figure{
+    margin: 0;
+}
+.item-list ul li figure img{
+    transition: transform .3s;
+}
+.item-list ul li:hover figure img{
+    transform: scale(1.2);
+}
+.item-list ul li:hover figure h4{
+    color: #ffb400;
+}
+.item-list figure h4{
+    transition: color .3s;
+    margin-bottom: 10px;
+}
+
+
+.item-list figure .fig-img{
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 5px solid #ffb400;
+}
+.item-list figure figcaption{
+    overflow-y: hidden;
+    padding: 20px;
+    background: #252525;
+    color: #fff;
+}
+.item-list figure p{
+    opacity: .8;
+    overflow: hidden;
+    height: 100px;
+    margin: 0;
+}
+
+.layer{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    z-index: -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1s;
+    opacity: 0;
+}
+
+.layer.on{
+    display: flex;
+    z-index: 3;
+    opacity: 1;
+}
+
+.me-skill{
+    margin-bottom: 100px;
+}
+
+.me-skill ul{
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 30px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.me-skill ul li{
+    text-align: center;
+    flex: 0 0 30%;
+}
+
+.me-skill ul li b{
+    display: block;
+    margin-bottom: 20px;
+    color: #ffffff80;
+}
+.donut-chart{
+    line-height: 90px;
+    margin: 0 auto;
+}
+.me-skill .donut-chart span{
+    color: #fff;
+}
+
+
+
+
+@media (max-width: 991px){
+    nav{
+        top: unset;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        padding: 8px;
+        height: auto;
+        background: #2b2a2a;
+    }
+    nav ul{
+        flex-direction: row;
+        justify-content: space-around;
+    }
+    nav ul li{
+        width: 45px;
+        height: 45px;
+        background: #444;
+        line-height: 45px;
+    }
+    nav ul li img{
+        width: 20px;
+    }
+
+    nav ul .nav-text{
+        display: none;
+    }
+
+    .page-home{
+        flex-direction: column;
+        background: #111!important;
+        padding: 50px 0 100px;
+    }
+    
+    .page-home .img-home{
+        width: 270px;
+        height: 270px;
+        border-radius: 270px;
+        border: 5px solid #ffb400;
+        background-position: center 20px;
+    }
+    .page-home .text-home{
+        width: 80%;
+        text-align: center;
+    }
+
+    .item-list ul{
+        justify-content: space-between;
+    }
+
+    .item-list ul li{
+        flex: 0 1 45%;
+        min-width: 280px;
+        cursor: pointer;
+        overflow: hidden;
+        border-radius: 5px;
+    }
+}
+
+@media (max-width: 769px){
+    .item-list ul{
+        justify-content: center;
+    }
+    .item-list ul li{
+        flex: 0 80%;
+        min-width: 280px;
+        cursor: pointer;
+        overflow: hidden;
+        border-radius: 5px;
+    }
+
+    .me-skill ul li{
+        flex: 0 0 45%;
+    }
+}

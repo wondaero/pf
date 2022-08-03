@@ -1,0 +1,247 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<style>
+			html, body{background: #000;}
+			.analog{
+				width: 300px; height: 300px; border-radius: 300px; margin: 50px auto; border: 10px solid gold;
+				background: linear-gradient(45deg, black, navy); box-shadow: inset 0 0 20px #ffffffdd;
+				box-sizing: border-box;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="analog" class="analog"></div>
+
+		<script>
+			const analogTag = document.querySelector('#analog');
+			analogTag.style.cssText += `
+				position: relative;
+			`;
+
+			for(let i = 0; i < 12; i++){
+				const index = document.createElement('DIV');
+				index.style.cssText += `
+					transform: rotate(${30 * (i + 1)}deg);
+					text-align: center;
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					top: 0;
+					left: 0;
+					padding-top: 10px;
+					box-sizing: border-box;
+					color: #fff;
+					font-weight: 900;
+				`;
+
+				index.innerHTML = i + 1;
+
+				analogTag.appendChild(index);
+			}
+
+			//미니 초시계
+			const miniSection = document.createElement('DIV');
+			miniSection.style.cssText += `
+				position: absolute;
+				bottom: 50px;
+				left: 50%;
+				width: 50px;
+				height: 50px;
+				margin-left: -25px;
+				border-radius: 50px;
+				background: #fff;
+				box-shadow: inset 0 0 5px #000000dd;
+				border: 3px solid gold;
+				box-sizing: border-box;
+			`;
+
+			for(let i = 0; i < 12; i++){
+				const miniIndex = document.createElement('DIV');
+				miniIndex.style.cssText += `
+					width: 100%;
+					height: 100%;
+					text-align: center;
+					position: absolute;
+					box-sizing: border-box;
+					left: 0;
+					color: navy;
+					transform: rotate(${i * 30}deg);
+					font-size: 8px;
+				`;
+
+				miniIndex.innerHTML = "'";
+
+				miniSection.appendChild(miniIndex);
+			}
+
+			const miniIdx = document.createElement('DIV');
+			const miniSecondSection = document.createElement('DIV');
+			
+			miniSecondSection.style.cssText += `
+				text-align: center;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				box-sizing: border-box;
+			`;		
+			
+			const miniSecondHand = document.createElement('DIV');
+			miniSecondHand.style.cssText += `
+				position: absolute;
+				top: 10px;
+				left: 50%;
+				margin-left: -1px;
+				width: 2px;
+				height: 15px;
+				background: #f00;
+				border-radius: 50% 50% 0 0;
+				transition: .1s;
+			`;
+
+			miniSecondSection.appendChild(miniSecondHand);
+			miniSection.appendChild(miniSecondSection);
+			analogTag.appendChild(miniSection);
+			
+			//시침
+			const hourSection = document.createElement('DIV');
+			hourSection.style.cssText += `
+				text-align: center;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				box-sizing: border-box;
+			`;
+
+			const hourHands = document.createElement('DIV');
+			hourHands.style.cssText += `
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 50px;
+				left: 50%;
+				width: 10px;
+				height: 100px;
+				margin-left: -5px;
+				background: linear-gradient(to bottom, #8aff4e 20px, #fff 0);
+				border-radius: 100% 100% 0 0;
+			`;
+
+			hourSection.appendChild(hourHands);
+			analogTag.appendChild(hourSection);
+
+			//분침
+			const minuteSection = document.createElement('DIV');
+			minuteSection.style.cssText += hourSection.style.cssText;
+
+			const minuteHands = document.createElement('DIV');
+			minuteHands.style.cssText += `
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 30px;
+				left: 50%;
+				width: 6px;
+				height: 120px;
+				margin-left: -3px;
+				background: #fcc;
+				border-radius: 100% 100% 0 0;
+			`;
+
+			minuteSection.appendChild(minuteHands);
+			analogTag.appendChild(minuteSection);
+
+			//초침
+			const secondSection = document.createElement('DIV');
+			secondSection.style.cssText += hourSection.style.cssText;
+
+			const secondHands = document.createElement('DIV');
+			secondHands.style.cssText += `
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 20px;
+				left: 50%;
+				width: 2px;
+				height: 150px;
+				margin-left: -1px;
+				background: #f00;
+				border-radius: 100% 100% 0 0;
+			`;
+
+			const secondHandDeco = document.createElement('DIV');
+			secondHandDeco.style.cssText += `
+				position: absolute;
+				top: 170px;
+				left: 50%;
+				margin-left: -3px;
+				width: 6px;
+				height: 6px;
+				border-radius: 6px;
+				border: 1px solid #f00;
+				box-sizing: border-box;
+			`;
+
+			secondSection.appendChild(secondHands);
+			secondSection.appendChild(secondHandDeco);
+			analogTag.appendChild(secondSection);
+
+			//초침2
+			const secondSection2 = document.createElement('DIV');
+			secondSection2.style.cssText += hourSection.style.cssText;
+
+			const secondHands2 = document.createElement('DIV');
+			secondHands2.style.cssText += `
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 20px;
+				left: 50%;
+				width: 2px;
+				height: 150px;
+				margin-left: -1px;
+				background: #ff000080;
+				border-radius: 100% 100% 0 0;
+			`;
+
+			const secondHandDeco2 = document.createElement('DIV');
+			secondHandDeco2.style.cssText += `
+				position: absolute;
+				top: 170px;
+				left: 50%;
+				margin-left: -3px;
+				width: 6px;
+				height: 6px;
+				border-radius: 6px;
+				border: 1px solid #f00;
+				box-sizing: border-box;
+			`;
+
+			secondSection2.appendChild(secondHands2);
+			secondSection2.appendChild(secondHandDeco2);
+			analogTag.appendChild(secondSection2);
+
+			setInterval(() => {
+				const now = new Date();
+
+				let h = now.getHours();
+				const m = now.getMinutes();
+				const s = now.getSeconds();
+				const ms = now.getMilliseconds();
+
+				h = h > 12 ? h - 12 : h;
+
+				hourSection.style.transform = 'rotate(' + ((h * 30) + (m * 0.5)) + 'deg)';
+				minuteSection.style.transform = 'rotate(' + ((m * 6) + (s * 0.1)) + 'deg)';
+				secondSection.style.transform = 'rotate(' + (s * 6) + 'deg)';
+				secondSection2.style.transform = 'rotate(' + (((s - 1) * 6) + (6 / 1000 * ms)) + 'deg)';
+
+				miniSecondSection.style.transform = 'rotate(' + (ms / 1000 * 360) + 'deg)';
+			}, 100)
+		</script>
+	<body>
+</html>
