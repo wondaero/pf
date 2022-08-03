@@ -279,6 +279,10 @@ nav ul li:hover .nav-text{
     color: #ffffffcc;
 }
 
+.item-sub-title br{
+    display: none;
+}
+
 .item-list{
     display: flex;
     justify-content: center;
@@ -477,4 +481,11 @@ nav ul li:hover .nav-text{
     .me-skill ul li{
         flex: 0 0 45%;
     }
+}
+
+@media (max-width: 550px){
+    .item-sub-title br{display: block;}
+}
+@media (max-width: 450px){
+    .text-home p br{display: none;}
 }

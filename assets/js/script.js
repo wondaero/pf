@@ -56,7 +56,7 @@ window.onload = function() {
         })
     }
 
-    tag.nav.querySelectorAll('li')[1].click();
+    tag.nav.querySelectorAll('li')[0].click();
 
     function timerLoading(){
         const start = new Date;
