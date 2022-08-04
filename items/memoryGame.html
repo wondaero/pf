@@ -78,7 +78,6 @@
                 color: #fff;
             }
 
-
             .times label{
                 display: flex;
                 align-items: center;
@@ -92,20 +91,20 @@
                 border-radius: 5px;
             }
 
-            .times span{
+            .icon-clock{
                 display: inline-block;
                 width: 30px;
                 height: 30px;
                 border-radius: 50%;
                 box-sizing: border-box;
                 position: relative;
-                box-shadow: inset 0 0 5px #00000080;
+                box-shadow: inset -1px -1px 5px #00000080, 1px 1px 5px #00000080;
             }
-            .times2 span{box-shadow: inset 0 0 5px #ffffff80;}
 
-            .times span:before, .times span:after{
-                content: '|';
-                display: block;
+            .icon-clock.white{box-shadow: inset -1px -1px 5px #ffffff80, 1px 1px 5px #ffffff80;}
+
+            .icon-clock > *{
+                display: inline-block;
                 width: 100%;
                 height: 100%;
                 position: absolute;
@@ -114,22 +113,25 @@
                 text-align: center;
             }
 
-            .times span:before{
-                font-size: 14px;
-                animation: clock-rotate 1s infinite linear;
-                color: #00000080;
+            .icon-clock > .clock-minute{animation: clock-rotate 1s infinite linear;}
+            .icon-clock > .clock-hour{animation: clock-rotate 12s infinite linear;}
+
+            .icon-clock > *:after{content: ''; display: inline-block; box-shadow: 0 0 5px #00000080;}
+            .icon-clock.white > *:after{box-shadow: 0 0 5px #ffffff80;}
+            .icon-clock > .clock-minute:after{
+                width: 2px;
+                height: 12px;
+                background: #00000080;
+                border-radius: 12px 12px 0 0;
             }
-            .times2 span:before{color: #ffffff80;}
-            
-            .times span:after{
-                font-size: 10px;
-                padding-top: 3px;
-                box-sizing: border-box;
-                font-weight: 900;
-                animation: clock-rotate 12s infinite linear;
-                color: #000;
+            .icon-clock.white > .clock-minute:after{background: #ffffff80;}
+            .icon-clock > .clock-hour:after{
+                width: 2px;
+                height: 8px;
+                background: #000;
+                border-radius: 8px 8px 0 0;
             }
-            .times2 span:after{color: #fff;}
+            .icon-clock.white > .clock-hour:after{background: #fff;}
 
             @keyframes clock-rotate{
                 from{transform: rotate(0)}
@@ -232,7 +234,7 @@
                     <button id="btn_start" class="btn-start">시작</button>
                 </div>
             </header>
-            <article class="sizes">
+            <article id="sizes" class="sizes">
                 <label>
                     <input type="radio" name="size" value="4" checked />
                     <span>4 * 4</span>
@@ -256,7 +258,10 @@
             </article>
             <article class="times">
                 <label>
-                    <span></span>
+                    <span class="icon-clock">
+                        <span class="clock-hour"></span>
+                        <span class="clock-minute"></span>
+                    </span>
                     <select id="count" name="count">
                         <option value="1">1초</option>
                         <option value="2">2초</option>
@@ -282,7 +287,7 @@
             </header>
             <article class="sizes">
                 <label>
-                    <input type="radio" name="size2" value="4" disabled checked />
+                    <input type="radio" name="size2" value="4" disabled />
                     <span>4 * 4</span>
                 </label>
                 <label>
@@ -304,7 +309,10 @@
             </article>
             <article class="times times2">
                 <label>
-                    <span></span>
+                    <span class="icon-clock white">
+                        <span class="clock-hour"></span>
+                        <span class="clock-minute"></span>
+                    </span>
                     <select id="count2" name="count" disabled>
                         <option value="1">1초</option>
                         <option value="2">2초</option>
@@ -391,13 +399,18 @@
                 const startBtn = document.querySelector('#btn_start');
                 startBtn.addEventListener('click', () => {
                     if(startBtn.classList.contains('no-click')) return;
-                    const time = document.querySelector('#count').value;
+                    const time = document.querySelector('#count');
+                    const sizes = document.querySelectorAll('#sizes input');
                     startBtn.classList.add('no-click');
+                    time.setAttribute('disabled', true);
+                    sizes.forEach((size) => {
+                        size.setAttribute('disabled', true);
+                    })
                     gameStart();
                     setTimeout(() => {
                         body.style.overflow = 'auto';
                         scrollAnimate('down');
-                    }, time * 1000);
+                    }, time.value * 1000);
                 });
 
                 const initBtns = document.querySelectorAll('[id^="btn_init"]');
