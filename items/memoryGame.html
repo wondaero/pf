@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"">
         <style>
 
             html, body{margin: 0; padding:0; height: 100%;}
@@ -322,7 +322,7 @@
                         block.classList.add('red');
                     });
 
-                    console.log(activeBlocks);
+                    console.log(answerIdx);
 
                     activeBlocks.forEach((blockIdx) => {
                         const activeBlock = document.querySelector('#board_a > div[data-idx="' + blockIdx + '"]');
@@ -335,11 +335,14 @@
                         activeBlock.classList.add('green');
                     })
 
-                    console.log(matchArr.length, answerBlock.length);
+                    console.log(matchArr, answerIdx);
 
-                    if(matchArr.length == activeBlocks.length){
+                    if(matchArr.length == answerIdx.length){
                         setTimeout(function(){
-                            alert('축하합니다.\n다 맞추셨습니다.');
+                            if(confirm('축하합니다.\n다 맞추셨습니다.\n초기화할까요?')){
+                                window.scrollTo(0, 0);
+                                location.reload();
+                            };
                         }, 1000)
                     }
                 });
