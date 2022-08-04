@@ -45,6 +45,8 @@
                 font-weight: 900;
             }
 
+            .btn-start.no-click{cursor: not-allowed;}
+
             .btn-init{background: red;}
 
             .btn-submit.no-click{cursor: not-allowed;}
@@ -75,6 +77,65 @@
                 background: blue;
                 color: #fff;
             }
+
+
+            .times label{
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                padding: 0 10px;
+                justify-content: flex-end;
+            }
+            .times select{
+                width: 80px;
+                padding: 5px;
+                border-radius: 5px;
+            }
+
+            .times span{
+                display: inline-block;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                box-sizing: border-box;
+                position: relative;
+                box-shadow: inset 0 0 5px #00000080;
+            }
+            .times2 span{box-shadow: inset 0 0 5px #ffffff80;}
+
+            .times span:before, .times span:after{
+                content: '|';
+                display: block;
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                text-align: center;
+            }
+
+            .times span:before{
+                font-size: 14px;
+                animation: clock-rotate 1s infinite linear;
+                color: #00000080;
+            }
+            .times2 span:before{color: #ffffff80;}
+            
+            .times span:after{
+                font-size: 10px;
+                padding-top: 3px;
+                box-sizing: border-box;
+                font-weight: 900;
+                animation: clock-rotate 12s infinite linear;
+                color: #000;
+            }
+            .times2 span:after{color: #fff;}
+
+            @keyframes clock-rotate{
+                from{transform: rotate(0)}
+                to{transform: rotate(360deg)}
+            }
+
             .board-q{
                 position: fixed;
                 height: 100vh;
@@ -98,10 +159,9 @@
 
             .board-q .board > div, .board-a .board > div{background: #fff; border-radius: 5px; box-shadow: inset 0 0 5px #00000080; transition: background 1s;}
             .board-a .board > div{cursor: pointer;}
-            .board-q .board > div.active, .board-a .board > div.active{background: blue;}
-            .board-a .board > div.red{background: red;}
-            .board-a .board > div.yellow{background: yellow;}
-            .board-a .board > div.green{background: green;}
+            .board-q .board > div.active{background: #f0f;}
+            .board-a .board > div.active{background: blue;}
+            .board-a .board > div.effect{transition: .5s cubic-bezier(0.68, -0.55, 0.27, 1.55); box-shadow: inset 0 0 0 5px #f0f;}
 
             .board-a .board > div.no-click{
                 cursor: not-allowed;
@@ -166,9 +226,10 @@
         <aside id="layer" class="layer none"></aside>
         <section class="board-q">
             <header class="cf">
-                <h1>MEMORY TEST</h1>
+                <h1>MEMORY</h1>
                 <div>
-                    <button id="btn_start">시작</button>
+                    <button id="btn_init1" class="btn-init">초기화</button>
+                    <button id="btn_start" class="btn-start">시작</button>
                 </div>
             </header>
             <article class="sizes">
@@ -193,12 +254,29 @@
                     <span>8 * 8</span>
                 </label>
             </article>
+            <article class="times">
+                <label>
+                    <span></span>
+                    <select id="count" name="count">
+                        <option value="1">1초</option>
+                        <option value="2">2초</option>
+                        <option value="3" selected>3초</option>
+                        <option value="4">4초</option>
+                        <option value="5">5초</option>
+                        <option value="6">6초</option>
+                        <option value="7">7초</option>
+                        <option value="8">8초</option>
+                        <option value="9">9초</option>
+                        <option value="10">10초</option>
+                    </select>
+                </label>
+            </article>
             <article id="board_q" class="board grid4x4"></article>
         </section>
         <section class="board-a">
             <header class="cf">
                 <div>
-                    <button id="btn_init" class="btn-init">초기화</button>
+                    <button id="btn_init2" class="btn-init">초기화</button>
                     <button id="btn_submit" class="btn-submit">제출</button>
                 </div>
             </header>
@@ -224,11 +302,28 @@
                     <span>8 * 8</span>
                 </label>
             </article>
+            <article class="times times2">
+                <label>
+                    <span></span>
+                    <select id="count2" name="count" disabled>
+                        <option value="1">1초</option>
+                        <option value="2">2초</option>
+                        <option value="3" selected>3초</option>
+                        <option value="4">4초</option>
+                        <option value="5">5초</option>
+                        <option value="6">6초</option>
+                        <option value="7">7초</option>
+                        <option value="8">8초</option>
+                        <option value="9">9초</option>
+                        <option value="10">10초</option>
+                    </select>
+                </label>
+            </article>
             <article id="board_a" class="board grid4x4"></article>
         </section>
         <script>
             window.onload = function(){
-                window.scrollTo(0, 0);
+                setTimeout(function(){window.scrollTo(0, 0);}, 100);    //타이밍 이슈로 인해
 
                 const size_q = document.querySelectorAll('.sizes input[name="size"]');
                 const board_q = document.querySelector('#board_q');
@@ -240,7 +335,7 @@
                 let activeBlocks = [];
 
                 const activeCnt = {
-                    4: {mn: 5, mx: 10},//16
+                    4: {mn: 5, mx: 10}, //16
                     5: {mn: 10, mx: 15},  //25
                     6: {mn: 15, mx: 20},  //36
                     7: {mn: 20, mx: 30},  //49
@@ -287,31 +382,43 @@
                     })
                 });
 
+                const countDown = document.querySelector('#count');
+                countDown.addEventListener('change', () => {
+                    const countDown2 = document.querySelector('#count2');
+                    countDown2.value = countDown.value;
+                });
+
                 const startBtn = document.querySelector('#btn_start');
                 startBtn.addEventListener('click', () => {
-                    layer.classList.remove('none');
+                    if(startBtn.classList.contains('no-click')) return;
+                    const time = document.querySelector('#count').value;
+                    startBtn.classList.add('no-click');
                     gameStart();
                     setTimeout(() => {
                         body.style.overflow = 'auto';
                         scrollAnimate('down');
-                    }, 3000);
+                    }, time * 1000);
                 });
 
-                const initBtn = document.querySelector('#btn_init');
-                initBtn.addEventListener('click', () => {
-                    if(confirm('초기화하시겠습니까?')){
-                        window.scrollTo(0, 0);
-                        location.reload();
-                    }
-                });
-                
+                const initBtns = document.querySelectorAll('[id^="btn_init"]');
+                initBtns.forEach((btn) => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.getAttribute('id');
+                        const isConfirm = id === 'btn_init1' ? true : confirm('초기화하시겠습니까?');
+                        if(isConfirm){
+                            window.scrollTo(0, 0);
+                            location.reload();
+                        }
+                    });
+                })
+
                 const submitBtn = document.querySelector('#btn_submit');
                 submitBtn.addEventListener('click', () => {
                     if(submitBtn.classList.contains('no-click')) return;
 
                     const answerIdx = [];
-                    const answerBlock = document.querySelectorAll('#board_a > div.active');
-                    const answerAllBlock = document.querySelectorAll('#board_a > div');
+                    const answerBlock = document.querySelectorAll('#board_a > div.active'); //내가 선택한 블럭
+                    const answerAllBlock = document.querySelectorAll('#board_a > div'); //모든 블럭
 
                     answerAllBlock.forEach((block) => {block.classList.add('no-click');});  //모든블럭 클릭 방지
                     submitBtn.classList.add('no-click');
@@ -319,25 +426,19 @@
                     answerBlock.forEach((block) => {
                         const val = block.getAttribute('data-idx');
                         answerIdx.push(+val);
-                        block.classList.add('red');
                     });
 
-                    console.log(answerIdx);
-
-                    activeBlocks.forEach((blockIdx) => {
+                    activeBlocks.forEach((blockIdx) => {    //정답블럭
                         const activeBlock = document.querySelector('#board_a > div[data-idx="' + blockIdx + '"]');
-                        activeBlock.classList.add('yellow');
+                        activeBlock.classList.add('effect');
                     })
                     
                     const matchArr = activeBlocks.filter(a => answerIdx.includes(a));
                     matchArr.forEach((matchedIdx) => {
                         const activeBlock = document.querySelector('#board_a > div[data-idx="' + matchedIdx + '"]');
-                        activeBlock.classList.add('green');
                     })
 
-                    console.log(matchArr, answerIdx);
-
-                    if(matchArr.length == answerIdx.length){
+                    if(matchArr.length == activeBlocks.length  && activeBlocks.length == answerIdx.length){
                         setTimeout(function(){
                             if(confirm('축하합니다.\n다 맞추셨습니다.\n초기화할까요?')){
                                 window.scrollTo(0, 0);
