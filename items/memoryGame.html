@@ -111,6 +111,7 @@
                 top: 0;
                 left: 0;
                 text-align: center;
+                box-sizing: border-box;
             }
 
             .icon-clock > .clock-minute{animation: clock-rotate 1s infinite linear;}
@@ -204,6 +205,10 @@
                 .board-a .board{
                     width: 500px;
                     height: 500px;
+                }
+
+                .icon-clock > *{
+                    padding-top: 3px;
                 }
             }
             @media (max-width: 550px),
