@@ -26,9 +26,26 @@
                 float: left;
                 margin: 0;
                 padding: 0;
-                text-shadow: 5px 5px 8px blue;
                 color: #eee;
+                position: relative;
             }
+            header h1:before{
+                content: 'MEMORY';
+                position: absolute;
+                top: 0;
+                left: 0;
+                text-shadow: 0 0 1px blue;
+                width: 0;
+                overflow: hidden;
+                animation: text-effect 5s linear infinite alternate;
+                color: #fff;
+            }
+
+            @keyframes text-effect{
+                from{width: 0}
+                to{width: 100%}
+            }
+
             header div{
                 float: right;
             }
@@ -98,10 +115,20 @@
                 border-radius: 50%;
                 box-sizing: border-box;
                 position: relative;
-                box-shadow: inset -1px -1px 5px #00000080, 1px 1px 5px #00000080;
+                box-shadow:
+                inset -1px -1px 5px #0000001a,
+                1px 1px 5px #0000001a,
+                inset 1px 1px 5px #0000001a,
+                -1px -1px 5px #0000001a;
             }
 
-            .icon-clock.white{box-shadow: inset -1px -1px 5px #ffffff80, 1px 1px 5px #ffffff80;}
+            .icon-clock.white{
+                box-shadow:
+                inset -1px -1px 5px #ffffff33,
+                1px 1px 5px #ffffff33,
+                inset 1px 1px 5px #ffffff33,
+                -1px -1px 5px #ffffff33;
+            }
 
             .icon-clock > *{
                 display: inline-block;
@@ -146,6 +173,9 @@
                 width: 100%;
                 top: 0;
                 left: 0;
+                z-index: 2;
+                transform: scale(1);
+                transition: transform .5s, opacity .5s;
             }
             .board-q .board,
             .board-a .board{
@@ -164,7 +194,15 @@
             .board-a .board > div{cursor: pointer;}
             .board-q .board > div.active{background: #f0f;}
             .board-a .board > div.active{background: blue;}
-            .board-a .board > div.effect{transition: .5s cubic-bezier(0.68, -0.55, 0.27, 1.55); box-shadow: inset 0 0 0 5px #f0f;}
+            .board-a .board > div.effect{
+                transition: .5s cubic-bezier(0.68, -0.55, 0.27, 1.55); box-shadow: inset 0 0 0 20px #f0f;
+                animation: blink 1s infinite linear;
+            }
+
+            @keyframes blink{
+                from{box-shadow: inset 0 0 0 20px #f0f;}
+                to{box-shadow: none;}
+            }
 
             .board-a .board > div.no-click{
                 cursor: not-allowed;
@@ -177,12 +215,10 @@
             .grid8x8{grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr);}
 
             .board-a{
-                margin-top: 100vh;
                 width: 100%;
                 height: 100%;
                 position: relative;
                 z-index: 1;
-                box-shadow: 0 -1px 5px #00000080;
                 background: #000;
             }
 
@@ -231,7 +267,7 @@
 	</head>
 	<body>
         <aside id="layer" class="layer none"></aside>
-        <section class="board-q">
+        <section id="questBoard" class="board-q">
             <header class="cf">
                 <h1>MEMORY</h1>
                 <div>
@@ -283,7 +319,7 @@
             </article>
             <article id="board_q" class="board grid4x4"></article>
         </section>
-        <section class="board-a">
+        <section id="answerBoard" class="board-a">
             <header class="cf">
                 <div>
                     <button id="btn_init2" class="btn-init">초기화</button>
@@ -336,8 +372,6 @@
         </section>
         <script>
             window.onload = function(){
-                setTimeout(function(){window.scrollTo(0, 0);}, 100);    //타이밍 이슈로 인해
-
                 const size_q = document.querySelectorAll('.sizes input[name="size"]');
                 const board_q = document.querySelector('#board_q');
                 const board_a = document.querySelector('#board_a');
@@ -406,15 +440,17 @@
                     if(startBtn.classList.contains('no-click')) return;
                     const time = document.querySelector('#count');
                     const sizes = document.querySelectorAll('#sizes input');
+                    const questBoard = document.querySelector('#questBoard');
+                    const answerBoard = document.querySelector('#answerBoard');
+
                     startBtn.classList.add('no-click');
                     time.setAttribute('disabled', true);
-                    sizes.forEach((size) => {
-                        size.setAttribute('disabled', true);
-                    })
+                    sizes.forEach((size) => {size.setAttribute('disabled', true);})
                     gameStart();
                     setTimeout(() => {
-                        body.style.overflow = 'auto';
-                        scrollAnimate('down');
+                        questBoard.style.transform = 'scale(2)';
+                        questBoard.style.opacity = '0';
+                        setTimeout(() => {questBoard.style.zIndex = 0}, (500 + 10));
                     }, time.value * 1000);
                 });
 
