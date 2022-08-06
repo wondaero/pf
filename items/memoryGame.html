@@ -41,6 +41,11 @@
                 color: #fff;
             }
 
+            .board-a header h1:before{
+                text-shadow: 0 0 1px #0f0;
+                color: #000;
+            }
+
             @keyframes text-effect{
                 from{width: 0}
                 to{width: 100%}
@@ -175,7 +180,7 @@
                 left: 0;
                 z-index: 2;
                 transform: scale(1);
-                transition: transform .5s, opacity .5s;
+                transition: transform 1s, opacity 1s linear;
             }
             .board-q .board,
             .board-a .board{
@@ -277,7 +282,7 @@
             </header>
             <article id="sizes" class="sizes">
                 <label>
-                    <input type="radio" name="size" value="4" checked />
+                    <input type="radio" name="size" value="4" />
                     <span>4 * 4</span>
                 </label>
                 <label>
@@ -306,7 +311,7 @@
                     <select id="count" name="count">
                         <option value="1">1초</option>
                         <option value="2">2초</option>
-                        <option value="3" selected>3초</option>
+                        <option value="3">3초</option>
                         <option value="4">4초</option>
                         <option value="5">5초</option>
                         <option value="6">6초</option>
@@ -321,6 +326,7 @@
         </section>
         <section id="answerBoard" class="board-a">
             <header class="cf">
+                <h1>MEMORY</h1>
                 <div>
                     <button id="btn_init2" class="btn-init">초기화</button>
                     <button id="btn_submit" class="btn-submit">제출</button>
@@ -391,11 +397,16 @@
 
                 const sizeClasses = ['grid4x4', 'grid5x5', 'grid6x6', 'grid7x7', 'grid8x8'];
 
-                size_q.forEach((el) => {
-                    el.addEventListener('change', function(){
-                        const val = el.value;
-                        const className = 'grid' + val + 'x' + val;
+                //세션 불러오기
+                const prevMemoryTime = +sessionStorage.getItem('memory-time') || 3;
+                const prevMemorySize = +sessionStorage.getItem('memory-size') || 4;
+                document.querySelector('#count').value = prevMemoryTime;
+                document.querySelector('#sizes input[value="' + prevMemorySize + '"]').checked = true;
 
+                size_q.forEach((el) => {
+                    const val = el.value;
+                    const className = 'grid' + val + 'x' + val;
+                    el.addEventListener('change', function(){
                         sizeClasses.forEach((classNm) => {
                             board_q.classList.remove(classNm);
                             board_a.classList.remove(classNm);
@@ -410,7 +421,6 @@
                         board_q.classList.add(className);
                         board_a.innerHTML = '';
                         board_a.classList.add(className);
-
 
                         for(let i = 0; i < val * val; i++){
                             const block = document.createElement('DIV');
@@ -427,6 +437,11 @@
                             board_a.appendChild(block2);
                         }
                     })
+
+                    if(val == prevMemorySize){
+                        let event = new Event('change');
+                        el.dispatchEvent(event);
+                    }
                 });
 
                 const countDown = document.querySelector('#count');
@@ -435,22 +450,31 @@
                     countDown2.value = countDown.value;
                 });
 
+                const countDownChange = new Event('change');
+                countDown.dispatchEvent(countDownChange);
+
                 const startBtn = document.querySelector('#btn_start');
                 startBtn.addEventListener('click', () => {
                     if(startBtn.classList.contains('no-click')) return;
                     const time = document.querySelector('#count');
                     const sizes = document.querySelectorAll('#sizes input');
+                    const selectSize = document.querySelector('#sizes input:checked');
                     const questBoard = document.querySelector('#questBoard');
                     const answerBoard = document.querySelector('#answerBoard');
 
                     startBtn.classList.add('no-click');
                     time.setAttribute('disabled', true);
-                    sizes.forEach((size) => {size.setAttribute('disabled', true);})
+                    sizes.forEach((size) => {size.setAttribute('disabled', true);});
+
+                    //세션저장
+                    sessionStorage.setItem('memory-time', time.value);
+                    sessionStorage.setItem('memory-size', selectSize.value);
+
                     gameStart();
                     setTimeout(() => {
                         questBoard.style.transform = 'scale(2)';
                         questBoard.style.opacity = '0';
-                        setTimeout(() => {questBoard.style.zIndex = 0}, (500 + 10));
+                        setTimeout(() => {questBoard.style.zIndex = 0}, (1000 + 10));
                     }, time.value * 1000);
                 });
 
@@ -519,7 +543,7 @@
                 }
 
                 function gameStart() {
-                    const size = document.querySelector('.sizes input[name="size"]:checked').value;
+                    const size = document.querySelector('#sizes input[name="size"]:checked').value;
                     const activeCnt2 = getRandomBetween(activeCnt[size].mn, activeCnt[size].mx);
 
                     const allBlocks = [];
@@ -551,9 +575,6 @@
 
                     return tmpArr;
                 }
-
-                let event = new Event('change');
-                size_q[0].dispatchEvent(event);
             }
         </script>
 		
