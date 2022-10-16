@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="../assets/css/bootstrap.min.css.map" />
+        <style>
+            aside{
+                position: fixed; top: 10px; right: 10px; width: 80px; height: 80px; border-radius: 50%; background: dodgerblue;
+                box-sizing: border-box;
+            }
+            aside span{font-size: 40px;}
+            aside ul{
+                position: absolute; width: 40px; height: 40px; border-radius: 50%; top: 20px; left: 20px; margin: 0; padding: 0; background: red;
+                box-sizing: border-box; list-style: none;
+            }
+            aside ul li{
+                position: absolute; top: 0; left: 0; width: 100%; height: 100%; font-size: 12px;
+                display: flex; align-items: center; justify-content: center; border-radius: 50%; background: red;
+            }
+
+            aside ul li:nth-child(1){left: -50px;}
+            aside ul li:nth-child(2){left: -50px; top: 50px;}
+            aside ul li:nth-child(3){top: 50px;}
+            aside ul li:nth-child(4){top: -25px; left: 25px;}
+        </style>
+	</head>
+	<body>
+        <aside>
+            <ul>
+                <li>calc</li>
+                <li>init</li>
+                <li>top</li>
+                <li>x</li>
+            </ul>
+            <span>&equiv;</span>
+        </aside>
+        <script></script>
+    </body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../assets/css/normalize.css">
+    <style>
+        h1,h2,h3,h4,h5,h6{margin: 0; padding: 0;}
+
+        header{background: darkslategray; color: #eee; padding: 10px; display: flex; align-items: center; justify-content: space-between;}
+        header button{background: 0; outline: 0; border: 0; color: #fff; font-size: 30px;}
+        .input-style1{position: relative; padding: 1px; box-sizing: border-box; z-index: 1;}
+        .input-style1 b{
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: scale(0); transition: transform .3s; z-index: -1;
+            background: linear-gradient(45deg, red, orange, yellow, green, blue, navy, purple); filter: blur(5px);}
+        .input-style1 input{position: relative; background: #fff; border: 0; outline: 0;}
+
+        .input-style1 input{border: 1px solid #eee;}
+        .input-style1 input:focus + b{ transform: scale(1);}
+
+        ul{list-style: none; padding: 0; margin: 0; margin-top: 1px solid #eee;}
+        ul li{padding: 10px; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: center; position: relative;}
+        ul li.cheapest{background: #acb9b9;}
+        ul input{width: 120px; height: 40px;}
+        
+        ul .li-content2{display: flex;}
+        
+        ul li > div label{display: block;}
+        
+        ul .li-content1{margin-right: 8px; position: relative;}
+        ul li.cheapest .li-content1:after{
+            content: '더 저렴'; display: block; position: absolute; top: 0; left: -30px; border: 3px solid #f00; color: #f00;
+            border-radius: 5px; font-weight: 900; font-size: 25px; transform: rotate(-25deg); z-index: 1;
+        }
+        ul .li-content2{margin-right: 8px;}
+        ul .li-content2 label:first-child{margin-right: 8px;}
+
+        .btn-x{background: 0; outline: 0; border: 0; cursor: pointer; padding: 0;}
+        .btn-x > span{padding: 0; display: inline-block; vertical-align: top; width: 30px; height: 30px; background: red; position: relative; border-radius: 50%;}
+        .btn-x > span > span{width: 3px; height: 20px; display: inline-block; position: absolute; top: 50%; left: 50%; background: #fff;}
+        .btn-x .x1{transform: translate(-50%, -50%) rotate(45deg);}
+        .btn-x .x2{transform: translate(-50%, -50%) rotate(-45deg);}
+
+        .btn-add{background: 0; outline: 0; border: 0; cursor: pointer; padding: 0;}
+        .btn-add > span{padding: 0; display: inline-block; vertical-align: top; width: 50px; height: 50px; background: dodgerblue; position: relative; border-radius: 50%;}
+        .btn-add > span > span{width: 8px; height: 30px; display: inline-block; position: absolute; top: 50%; left: 50%; background: #fff; border-radius: 30px;}
+        .btn-add .add1{transform: translate(-50%, -50%);}
+        .btn-add .add2{transform: translate(-50%, -50%) rotate(90deg);}
+
+        aside{position: fixed; bottom: 30px; right: 30px;}
+
+        @media (max-width: 640px){
+            ul .li-content2{flex-direction: column;}
+            ul .li-content2 label:first-child{margin-right: 0; margin-bottom: 8px;}
+        }
+
+        
+    </style>
+</head>
+<body>
+    <header>
+        <h1>그래서 얼마?</h1>
+        <button id="calc"><b>calQ</b></button>
+    </header>
+    <ul id="list"></ul>
+
+    <aside>
+        <button id="addBtn" class="btn-add">
+            <span>
+                <span class="add1"></span>
+                <span class="add2"></span>
+            </span>
+        </button>
+
+    </aside>
+
+    <script>
+
+        window.addEventListener('load', function(){
+            const itemList = [];
+
+            const qs = function(target){return document.querySelector(target);}
+            const qsa = function(target){return document.querySelectorAll(target);}
+
+            // document.addEventListener('click', function(e){
+            //     console.log(e.target);
+            // })
+            
+            
+
+            qs('#addBtn').addEventListener('click', function(){
+                const ul = qs('#list');
+                const liCnt = ul.querySelectorAll('li').length;
+
+                const cstmTitle = function(txt){return String(txt) + (liCnt + 1);}
+
+                const li = appendTag(ul, 'li');
+                const div1 = appendTag(li, 'div', {class: ['li-content1']});
+                const label1 = appendTag(div1, 'label', {class: ['input-style1']});
+                const input1 = appendTag(label1, 'input', {attr: {type: 'text', name: 'title', placeholder: cstmTitle('타이틀')}});
+                const b1 = appendTag(label1, 'b');
+
+                const div2 = appendTag(li, 'div', {class: ['li-content2']});
+                const label2 = appendTag(div2, 'label', {class: ['input-style1']});
+                const input2 = appendTag(label2, 'input', {attr: {type: 'number', name: 'price', placeholder: cstmTitle('가격')}});
+                const b2 = appendTag(label2, 'b');
+                const label3 = appendTag(div2, 'label', {class: ['input-style1']});
+                const input3 = appendTag(label3, 'input', {attr: {type: 'number', name: 'capa', placeholder: cstmTitle('용량')}});
+                const b3 = appendTag(label3, 'b');
+
+                const div3 = appendTag(li, 'div');
+                const button3 = appendTag(div3, 'button', {
+                    class: ['btn-x'],
+                    fnc: {
+                        click: function(){
+                            if(ul.querySelectorAll('li').length < 3){
+                                alert('더이상 지울 수 없습니다.');
+                                return;
+                            }
+                            this.closest('li').remove();
+                        }
+                    }
+                });
+                const span1 = appendTag(button3, 'span');
+                const span1_1 = appendTag(span1, 'span', {class: ['x1']});
+                const span1_2 = appendTag(span1, 'span', {class: ['x2']});
+            });
+
+            qs('#addBtn').click();
+            qs('#addBtn').click();
+
+
+            function appendTag(target, tagNm, option){
+				const toTarget = typeof target == 'object' ? target : document.querySelector('target');
+				const tag =  document.createElement(tagNm);
+				if(option && option.html) tag.insertAdjacentHTML('afterbegin', option.html);
+				if(option && option.attr) for(key in option.attr) tag.setAttribute(key, option.attr[key]);
+				if(option && option.class) option.class.forEach((el) => tag.classList.add(el));
+				if(option && option.style) for(key in option.style) tag.style[key] = option.style[key];
+				if(option && option.fnc) for(key in option.fnc) tag.addEventListener(key, option.fnc[key]);
+
+				toTarget.appendChild(tag);
+
+				return tag;
+			}
+
+            qs('#calc').addEventListener('click', function(){
+                const ul = qs('#list');
+                const lis = ul.querySelectorAll('li');
+
+                itemList.length = 0;
+
+                lis.forEach(function(li){
+                    li.classList.remove('cheapest');
+                    const title = li.querySelector('[name^="title"]').value;
+                    const price = li.querySelector('[name^="price"]').value;
+                    const capa = li.querySelector('[name^="capa"]').value;
+
+                    const tmpObj = {};
+                    tmpObj.title = title;
+                    tmpObj.price = price;
+                    tmpObj.capa = capa;
+
+                    itemList.push(tmpObj);
+
+                })
+
+                let cheaperIdx;
+                let cheaperValue;
+
+                console.log(cheaperValue);
+
+                itemList.forEach(function(itm, idx){
+                    const val = calcTo1(itm.price, itm.capa);
+
+                    if(cheaperValue === undefined || val <= cheaperValue){
+                        cheaperIdx = idx;
+                        cheaperValue = val;
+                    };
+                });
+
+                console.log(cheaperIdx, cheaperValue)
+
+                lis[cheaperIdx].classList.add('cheapest');
+
+                function calcTo1(p, c){return p / c;};
+            })
+
+
+
+        })
+
+
+
+
+    </script>
+</body>
+</html>
