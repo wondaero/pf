@@ -5,11 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Document</title>
     <link rel="stylesheet" href="../assets/css/normalize.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
     <style>
+
+        .container2{max-width: 1200px; margin: 0 auto;}
+
+        svg{position: fixed; z-index: -1;}
         h1,h2,h3,h4,h5,h6{margin: 0; padding: 0;}
 
-        header{background: darkslategray; color: #eee; padding: 10px; display: flex; align-items: center; justify-content: space-between;}
-        header button{background: 0; outline: 0; border: 0; color: #fff; font-size: 30px;}
+        header{background: darkslategray; color: #eee; margin-bottom: 10px; padding: 10px;}
+        header .wrapper{display: flex; align-items: center; justify-content: space-between;}
+        .btn-calc-space{text-align: right; padding: 10px; display: flex; justify-content: space-between; align-items: center;}
+        .btn-calc{background: 0; outline: 0; border: 0; font-size: 20px; background: darkslategray; padding: 5px 10px; border-radius: 5px; color: #fff;}
+
         .input-style1{position: relative; padding: 1px; box-sizing: border-box; z-index: 1;}
         .input-style1 b{
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: scale(0); transition: transform .3s; z-index: -1;
@@ -17,24 +25,28 @@
         .input-style1 input{position: relative; background: #fff; border: 0; outline: 0;}
 
         .input-style1 input{border: 1px solid #eee;}
-        .input-style1 input:focus + b{ transform: scale(1);}
+        .input-style1 input:focus + b{transform: scale(1);}
 
-        ul{list-style: none; padding: 0; margin: 0; margin-top: 1px solid #eee;}
-        ul li{padding: 10px; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: center; position: relative;}
-        ul li.cheapest{background: #acb9b9;}
-        ul input{width: 120px; height: 40px;}
+        .itmList{list-style: none; padding: 0; margin: 0; border-top: 1px solid #eee;}
+        .itmList li{padding: 10px; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: center; position: relative; flex-wrap: wrap;}
+        .itmList li.cheapest{background: #acb9b9;}
+        .itmList input{width: 120px; height: 40px;}
         
-        ul .li-content2{display: flex;}
+        .itmList .li-content2{display: flex;}
         
-        ul li > div label{display: block;}
+        .itmList li > div label{display: block;}
         
-        ul .li-content1{margin-right: 8px; position: relative;}
-        ul li.cheapest .li-content1:after{
-            content: '더 저렴'; display: block; position: absolute; top: 0; left: -30px; border: 3px solid #f00; color: #f00;
-            border-radius: 5px; font-weight: 900; font-size: 25px; transform: rotate(-25deg); z-index: 1;
+        .itmList .li-content1{margin-right: 5px; position: relative;}
+        .itmList li.cheapest .li-content1:after{
+            content: '더저렴'; display: block; position: absolute; top: -30px; left: -5px; border: 3px solid #f00; color: #f00;
+            border-radius: 5px; font-weight: 900; font-size: 25px; transform: rotate(-10deg); z-index: 1;
         }
-        ul .li-content2{margin-right: 8px;}
-        ul .li-content2 label:first-child{margin-right: 8px;}
+        .itmList .li-content2{margin-right: 5px;}
+        .itmList .li-content2 label:first-child{margin-right: 8px;}
+
+        .itmList .li-content4{width: 100%; text-align: center; margin: 0; padding: 0; border-radius: 10px;}
+        .itmList .li-content4.on{margin-top: 5px; padding: 10px; background: #eee;}
+        .itmList .li-content4.on b{font-size: 20px;}
 
         .btn-x{background: 0; outline: 0; border: 0; cursor: pointer; padding: 0;}
         .btn-x > span{padding: 0; display: inline-block; vertical-align: top; width: 30px; height: 30px; background: red; position: relative; border-radius: 50%;}
@@ -43,16 +55,17 @@
         .btn-x .x2{transform: translate(-50%, -50%) rotate(-45deg);}
 
         .btn-add{background: 0; outline: 0; border: 0; cursor: pointer; padding: 0;}
-        .btn-add > span{padding: 0; display: inline-block; vertical-align: top; width: 50px; height: 50px; background: dodgerblue; position: relative; border-radius: 50%;}
-        .btn-add > span > span{width: 8px; height: 30px; display: inline-block; position: absolute; top: 50%; left: 50%; background: #fff; border-radius: 30px;}
+        .btn-add > span{padding: 0; display: inline-block; vertical-align: top; width: 30px; height: 30px; background: dodgerblue; position: relative; border-radius: 50%;}
+        .btn-add > span > span{width: 5px; height: 20px; display: inline-block; position: absolute; top: 50%; left: 50%; background: #fff; border-radius: 30px;}
         .btn-add .add1{transform: translate(-50%, -50%);}
         .btn-add .add2{transform: translate(-50%, -50%) rotate(90deg);}
 
-        aside{position: fixed; bottom: 30px; right: 30px;}
+        .btn-add-space{text-align: center; border-bottom: 1px solid #eee; padding: 10px;}
+
 
         @media (max-width: 640px){
             ul .li-content2{flex-direction: column;}
-            ul .li-content2 label:first-child{margin-right: 0; margin-bottom: 8px;}
+            ul .li-content2 label:first-child{margin-right: 0; margin-bottom: 5px;}
         }
 
         
@@ -60,20 +73,28 @@
 </head>
 <body>
     <header>
-        <h1>그래서 얼마?</h1>
-        <button id="calc"><b>calQ</b></button>
+        <div class="wrapper container2">
+            <h1>그래서 얼마?</h1>
+        </div>
     </header>
-    <ul id="list"></ul>
-
-    <aside>
-        <button id="addBtn" class="btn-add">
-            <span>
-                <span class="add1"></span>
-                <span class="add2"></span>
-            </span>
-        </button>
-
-    </aside>
+    <section class="container2">
+        <div class="btn-calc-space">
+            <select>
+                <option selected>가격 낮은 순</option>
+                <!-- <option>가격 높은 순</option> -->
+            </select>
+            <button id="calc" class="btn-calc"><b>계산</b></button>
+        </div>
+        <ul id="list" class="itmList"></ul>
+        <div class="btn-add-space">
+            <button id="addBtn" class="btn-add">
+                <span>
+                    <span class="add1"></span>
+                    <span class="add2"></span>
+                </span>
+            </button>
+        </div>
+    </section>
 
     <script>
 
@@ -125,6 +146,8 @@
                 const span1 = appendTag(button3, 'span');
                 const span1_1 = appendTag(span1, 'span', {class: ['x1']});
                 const span1_2 = appendTag(span1, 'span', {class: ['x2']});
+
+                const p4 = appendTag(li, 'p', {attr: {'data-id': 'result'}, class: ['li-content4']});
             });
 
             qs('#addBtn').click();
@@ -164,15 +187,32 @@
 
                     itemList.push(tmpObj);
 
+                    const p = li.querySelector('p');
+                    
+                    const title2 = tmpObj.title || li.querySelector('input').getAttribute('placeholder');
+                    const price2 = calcTo1(tmpObj.price, tmpObj.capa);
+
+                    isError = tmpObj.price === '' || tmpObj.capa === '';
+
+                    p.innerHTML = '';
+
+                    if(isError) return true;
+                    
+                    p.classList.add('on');
+                    p.innerHTML += '<b>' + title2 + '</b>은(는) ';
+                    p.innerHTML += '<b>1용량</b>당 '
+                    p.innerHTML += '<b>' + price2 + '가격</b>입니다.';
                 })
 
                 let cheaperIdx;
                 let cheaperValue;
 
-                console.log(cheaperValue);
+                let isBlank = false;
 
                 itemList.forEach(function(itm, idx){
                     const val = calcTo1(itm.price, itm.capa);
+
+                    if(itm.price == '' || itm.capa == '') isBlank = true;
 
                     if(cheaperValue === undefined || val <= cheaperValue){
                         cheaperIdx = idx;
@@ -180,14 +220,10 @@
                     };
                 });
 
-                console.log(cheaperIdx, cheaperValue)
-
-                lis[cheaperIdx].classList.add('cheapest');
+                if(!isBlank) lis[cheaperIdx].classList.add('cheapest');
 
                 function calcTo1(p, c){return p / c;};
             })
-
-
 
         })
 
