@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>vlank</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/normalize.css">
+    <style>
+        .header{display: flex; align-items: center; justify-content: space-between; background: #fdd;}
+        .header button{border: 0; outline: 0; padding: 10px; border-radius: 5px; vertical-align: middle; background: 0; font-weight: 900; cursor: pointer;}
+        .header button:disabled{color: rgba(0, 0, 0, .5);}
+        .viewer{line-height: 1.5; padding: 10px;}
+        .viewer span{border: 1px solid #eee; display: inline-block; color: transparent; padding: 5px; line-height: normal; font-weight: 600; transition: color .5s linear; cursor: pointer;}
+        .viewer span:hover{color: #000;}
+        .layer{position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, .5); z-index: 2; display: none;}
+        .layer.on{display: block;}
+        .layer button{background: 0; border: 0; outline: 0; font-weight: 900; cursor: pointer;}
+        .layer > section{min-width: 300px; width: 50%; position: absolute; top: 50%; left: 50%; transform : translate(-50%, -50%);}
+        .layer header{background: #fff; display: flex; justify-content: flex-end; padding: 10px;}
+        .layer article{padding: 10px; box-sizing: border-box; background: #fdd;}
+        .layer textarea{display: block; max-height: 800px; height: 200px; width: 100%; box-sizing: border-box; border: 0; resize: none; padding: 5px; box-sizing: border-box; overflow-y: auto;}
+        .layer .btn-space{text-align: right; margin-bottom: 10px;}
+        .layer .btn-space button{vertical-align: top;}
+    </style>
+
+</head>
+<body>
+    <header id="header" class="header">
+        <div>
+            <button class="btn-blank" disabled>설정</button>
+        </div>
+        <div>
+            <button id="btn_layerOn" class="btn-layer-on">추가</button>
+            <button id="btn_vlank" class="btn-vlank">vlank</button>
+        </div>
+    </header>
+    <div>
+        <div id="viewer" class="viewer">등록된 text가 없습니다.</div>
+    </div>
+
+    <aside id="layer" class="layer">
+        <section>
+            <header>
+                <div>
+                    <button id="btn_layerClose">&cross;</button>
+                </div>
+            </header>
+            <article>
+                <div class="btn-space">
+                    <button id="btn_init">초기화</button>
+                    <button id="btn_add">등록</button>
+                </div>
+                <div>
+                    <!-- <input id="textTitle" placeholder="타이틀" /> -->
+                    <textarea id="textContent" placeholder="내용"></textarea>
+                </div>
+            </article>
+        </section>
+    </aside>
+
+
+    <script>
+        const qs = function(t){return document.querySelector(t);}
+        const qsa = function(t){return document.querySelectorAll(t);}
+
+        const textArr = [];
+
+        const vlank2 = new vlank();
+        
+        qs('#layer').addEventListener('click', function(e){ //레이어팝업쪽
+            const ids = e.target.id;
+            const textTitle = qs('#textTitle');
+            const textContent = qs('#textContent');
+            switch(ids){
+                case 'btn_init':
+                    textContent.value = '';
+                break;
+                case 'btn_add':
+                    
+                    
+                    if(textContent.value === ''){
+                        alert('내용을 입력해주세요.');
+                        return;
+                    }
+                    
+                    const tmpObj = {
+                        // title: textTitle.value !== '' ? textTitle.value : (textTitle.getAttribute('placeholder') + textArr.length),
+                        content: textContent.value
+                    };
+
+                    vlank2.setText(tmpObj.content);
+                    console.log(vlank2.getText());
+                    qs('#viewer').innerHTML = vlank2.getText();
+
+                case 'layer':
+                case 'btn_layerClose':
+                    this.classList.remove('on');
+                break;
+            }
+        });
+
+        qs('#header').addEventListener('click', function(e){    //header쪽 버튼
+            const ids = e.target.id;
+            switch(ids){
+                case 'btn_layerOn':
+                    qs('#layer').classList.add('on');
+                    qs('#layer textarea').focus();
+                break;
+                case 'btn_vlank':
+                    console.log(vlank2.getText());
+                    if(vlank2.getText() === ''){
+                        alert('내용을 추가해 주세요.');
+                        return;
+                    }
+
+                    const blankCnt = prompt('몇개를 빈칸으로 만들까요?\n범위: 0 ~ ' + vlank2.getBlockCntRange(), parseInt(vlank2.getBlockCntRange() / 2));
+
+                    if(blankCnt){
+                        if(blankCnt == '' || blankCnt == undefined || blankCnt == null || isNaN(blankCnt) || blankCnt < 0 || blankCnt > vlank2.getBlockCntRange()){
+                            alert('범위 내 숫자를 입력해주세요.');
+                            return;
+                        }
+                        vlank2.makeBlank(vlank2.getText(), blankCnt);
+                    }
+                break;
+            }
+        })
+
+        function getRandomNum(mn, mx){return Math.floor(Math.random() * (mx - mn + 1)) + mn};
+
+        function vlank(target, option) {
+
+            const t = this;
+            this.text = '';
+
+            this.makeBlank = function(txt, cnt){
+                if(cnt === 0 || cnt === undefined || isNaN(cnt)) return;
+
+                const txtArr = txt.split(' ');
+                for(let i = 0; i < txtArr.length; i++){
+                    if(txtArr[i] == ''){
+                        txtArr.splice(i--, 1);
+                    } 
+                }
+
+                const txtInfoArr = [];
+                const idxArr = [];
+                const randomPickIdxArr = [];
+
+                for(let i = 0; i < txtArr.length; i++) idxArr.push(i);
+
+                txtArr.forEach(function(el, idx){
+                    const tmpObj = {idx: idx, txt: el, isBlank: false};
+                    txtInfoArr.push(tmpObj);
+                })
+
+                for(let i = 0; i < cnt; i++){
+                    const rndmNum = getRandomNum(0, idxArr.length - 1 - i);
+                    randomPickIdxArr.push(idxArr.splice(rndmNum, 1)[0]);
+                }
+
+                randomPickIdxArr.forEach(function(el){
+                    txtInfoArr[el].isBlank = true;
+                });
+
+                let finalTxt = '';
+
+                txtInfoArr.forEach(function(txtObj, idx){
+                    finalTxt += txtObj.isBlank ? '<span data-hidden="' + txtObj.txt + '">' + txtObj.txt + '</span>' : txtObj.txt;
+                    if(txtInfoArr.length - 1 !== idx) finalTxt += ' ';
+                })
+
+                qs('#viewer').innerHTML = finalTxt;
+            }
+
+            this.setText = function(txt){
+                const txtArr = txt.split(' ');
+                for(let i = 0; i < txtArr.length; i++){
+                    if(txtArr[i] == ''){
+                        txtArr.splice(i--, 1);
+                    } 
+                }
+                t.text = txtArr.join(' ');
+            }
+
+            this.getText = function(){
+                return t.text;
+            }
+
+            this.getBlockCntRange = function(){
+                return t.text.split(' ').length;
+            }
+        }
+
+
+    </script>
+
+</body>
+</html>
