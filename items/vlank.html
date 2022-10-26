@@ -9,7 +9,7 @@
         .header{display: flex; align-items: center; justify-content: space-between; background: #fdd;}
         .header button{border: 0; outline: 0; padding: 10px; border-radius: 5px; vertical-align: middle; background: 0; font-weight: 900; cursor: pointer;}
         .header button:disabled{color: rgba(0, 0, 0, .5);}
-        .viewer{line-height: 1.5; padding: 10px;}
+        .viewer{line-height: 3; padding: 10px;}
         .viewer span{border: 1px solid #eee; display: inline-block; color: transparent; padding: 5px; line-height: normal; font-weight: 600; transition: color .5s linear; cursor: pointer;}
         .viewer span:hover{color: #000;}
         .layer{position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, .5); z-index: 2; display: none;}
@@ -18,7 +18,7 @@
         .layer > section{min-width: 300px; width: 50%; position: absolute; top: 50%; left: 50%; transform : translate(-50%, -50%);}
         .layer header{background: #fff; display: flex; justify-content: flex-end; padding: 10px;}
         .layer article{padding: 10px; box-sizing: border-box; background: #fdd;}
-        .layer textarea{display: block; max-height: 800px; height: 200px; width: 100%; box-sizing: border-box; border: 0; resize: none; padding: 5px; box-sizing: border-box; overflow-y: auto;}
+        .layer textarea{display: block; max-height: 800px; height: 200px; width: 100%; box-sizing: border-box; border: 0; resize: none; padding: 5px; box-sizing: border-box; overflow-y: auto; padding: 10px;}
         .layer .btn-space{text-align: right; margin-bottom: 10px;}
         .layer .btn-space button{vertical-align: top;}
     </style>
@@ -76,8 +76,6 @@
                     textContent.value = '';
                 break;
                 case 'btn_add':
-                    
-                    
                     if(textContent.value === ''){
                         alert('내용을 입력해주세요.');
                         return;
@@ -89,7 +87,8 @@
                     };
 
                     vlank2.setText(tmpObj.content);
-                    console.log(vlank2.getText());
+
+
                     qs('#viewer').innerHTML = vlank2.getText();
 
                 case 'layer':
@@ -107,7 +106,6 @@
                     qs('#layer textarea').focus();
                 break;
                 case 'btn_vlank':
-                    console.log(vlank2.getText());
                     if(vlank2.getText() === ''){
                         alert('내용을 추가해 주세요.');
                         return;
@@ -136,7 +134,9 @@
             this.makeBlank = function(txt, cnt){
                 if(cnt === 0 || cnt === undefined || isNaN(cnt)) return;
 
-                const txtArr = txt.split(' ');
+                const txtArr = txt.split(/\s/);
+                // const txtArr = txt.split(' ');
+                
                 for(let i = 0; i < txtArr.length; i++){
                     if(txtArr[i] == ''){
                         txtArr.splice(i--, 1);
@@ -189,6 +189,10 @@
 
             this.getBlockCntRange = function(){
                 return t.text.split(' ').length;
+            }
+
+            this.strToArr = function(){
+                return t.text.split(/\s/);
             }
         }
 
