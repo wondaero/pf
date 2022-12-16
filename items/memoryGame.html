@@ -1,274 +1,264 @@
 <!DOCTYPE html>
 <html>
-	<head>
-        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-        <style>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>자바스크립트</title>
+    <style>
+        html, body{margin: 0; padding:0; height: 100%;}
 
-            html, body{margin: 0; padding:0; height: 100%;}
+        body{overflow: hidden; -ms-overflow-style: none;}
+        ::-webkit-scrollbar{display: none;}
 
-            body{overflow: hidden; -ms-overflow-style: none;}
-            ::-webkit-scrollbar{display: none;}
+        /* 공통start */
+        .cf:after{content: ''; display: block; clear: both;}
+        .none{display: none;}
+        /* 공통end */
 
-            /* 공통start */
-            .cf:after{
-                content: '';
-                display: block;
-                clear: both;
-            }
-            .none{display: none;}
-            /* 공통end */
+        header{
+          padding: 10px;
+          box-sizing: border-box;
+        }
+        header h1{
+          float: left;
+          margin: 0;
+          padding: 0;
+          color: #eee;
+          position: relative;
+        }
+        header h1:before{
+          content: 'MEMORY';
+          position: absolute;
+          top: 0;
+          left: 0;
+          text-shadow: 0 0 1px blue;
+          width: 0;
+          overflow: hidden;
+          animation: text-effect 5s linear infinite alternate;
+          color: #fff;
+        }
 
-            header{
-                padding: 10px;
-                box-sizing: border-box;
-            }
-            header h1{
-                float: left;
-                margin: 0;
-                padding: 0;
-                color: #eee;
-                position: relative;
-            }
-            header h1:before{
-                content: 'MEMORY';
-                position: absolute;
-                top: 0;
-                left: 0;
-                text-shadow: 0 0 1px blue;
-                width: 0;
-                overflow: hidden;
-                animation: text-effect 5s linear infinite alternate;
-                color: #fff;
-            }
+        .board-a header h1:before{
+          text-shadow: 0 0 1px #0f0;
+          color: #000;
+        }
 
-            .board-a header h1:before{
-                text-shadow: 0 0 1px #0f0;
-                color: #000;
-            }
+        @keyframes text-effect{
+          from{width: 0}
+          to{width: 100%}
+        }
 
-            @keyframes text-effect{
-                from{width: 0}
-                to{width: 100%}
-            }
+        header div{float: right;}
+        header button{
+          background: blue;
+          border: 0;
+          outline: 0;
+          height: auto;
+          color: #fff;
+          padding: 10px;
+          border-radius: 5px;
+          width: 80px;
+          cursor: pointer;
+          font-weight: 900;
+        }
 
-            header div{
-                float: right;
-            }
-            header button{
-                background: blue;
-                border: 0;
-                outline: 0;
-                height: auto;
-                color: #fff;
-                padding: 10px;
-                border-radius: 5px;
-                width: 80px;
-                cursor: pointer;
-                font-weight: 900;
-            }
+        .btn-start.no-click{cursor: not-allowed;}
 
-            .btn-start.no-click{cursor: not-allowed;}
+        .btn-init{background: red;}
 
-            .btn-init{background: red;}
+        .btn-submit.no-click{cursor: not-allowed;}
 
-            .btn-submit.no-click{cursor: not-allowed;}
+        .sizes {padding: 10px;}
+        .sizes input{display: none;}
 
-            .sizes {
-                padding: 10px;
-            }
-            .sizes input{
-                display: none;
-            }
+        .sizes span{
+          display: inline-block;
+          padding: 10px;
+          width: 35px;
+          background: #ddd;
+          border-radius: 5px;
+          transition: .5s;
+          text-align: center;
+          font-size: 12px;
+          cursor: pointer;
+          font-weight: 900;
+        }
 
-            .sizes span{
-                display: inline-block;
-                padding: 10px;
-                width: 35px;
-                background: #ddd;
-                border-radius: 5px;
-                transition: .5s;
-                text-align: center;
-                font-size: 12px;
-                cursor: pointer;
-                font-weight: 900;
-            }
+        .sizes input[name="size2"] + span{cursor: not-allowed;}
+        
+        .sizes label:nth-child(1) input:checked + span{background: red; color: #fff;}
+        .sizes label:nth-child(2) input:checked + span{background: yellow; color: #000;}
+        .sizes label:nth-child(3) input:checked + span{background: green; color: #fff;}
+        .sizes label:nth-child(4) input:checked + span{background: blue; color: #fff;}
+        .sizes label:nth-child(5) input:checked + span{background: purple; color: #fff;}
 
-            .sizes input[name="size2"] + span{cursor: not-allowed;}
-            
-            .sizes input:checked + span{
-                background: blue;
-                color: #fff;
-            }
+        .times label{
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          padding: 0 10px;
+          justify-content: flex-end;
+        }
+        .times select{
+          width: 80px;
+          padding: 5px;
+          border-radius: 5px;
+        }
 
-            .times label{
-                display: flex;
-                align-items: center;
-                gap: 5px;
-                padding: 0 10px;
-                justify-content: flex-end;
-            }
-            .times select{
-                width: 80px;
-                padding: 5px;
-                border-radius: 5px;
-            }
+        .icon-clock{
+          display: inline-block;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          box-sizing: border-box;
+          position: relative;
+          box-shadow:
+          inset -1px -1px 5px #0000001a,
+          1px 1px 5px #0000001a,
+          inset 1px 1px 5px #0000001a,
+          -1px -1px 5px #0000001a;
+        }
 
-            .icon-clock{
-                display: inline-block;
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                box-sizing: border-box;
-                position: relative;
-                box-shadow:
-                inset -1px -1px 5px #0000001a,
-                1px 1px 5px #0000001a,
-                inset 1px 1px 5px #0000001a,
-                -1px -1px 5px #0000001a;
-            }
+        .icon-clock.white{
+          box-shadow:
+          inset -1px -1px 5px #ffffff33,
+          1px 1px 5px #ffffff33,
+          inset 1px 1px 5px #ffffff33,
+          -1px -1px 5px #ffffff33;
+        }
 
-            .icon-clock.white{
-                box-shadow:
-                inset -1px -1px 5px #ffffff33,
-                1px 1px 5px #ffffff33,
-                inset 1px 1px 5px #ffffff33,
-                -1px -1px 5px #ffffff33;
-            }
+        .icon-clock > *{
+          display: inline-block;
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          text-align: center;
+          box-sizing: border-box;
+        }
 
-            .icon-clock > *{
-                display: inline-block;
-                width: 100%;
-                height: 100%;
-                position: absolute;
-                top: 0;
-                left: 0;
-                text-align: center;
-                box-sizing: border-box;
-            }
+        .icon-clock > .clock-minute{animation: clock-rotate 1s infinite linear;}
+        .icon-clock > .clock-hour{animation: clock-rotate 12s infinite linear;}
 
-            .icon-clock > .clock-minute{animation: clock-rotate 1s infinite linear;}
-            .icon-clock > .clock-hour{animation: clock-rotate 12s infinite linear;}
+        .icon-clock > *:after{content: ''; display: inline-block; box-shadow: 0 0 5px #00000080;}
+        .icon-clock.white > *:after{box-shadow: 0 0 5px #ffffff80;}
+        .icon-clock > .clock-minute:after{
+          width: 2px;
+          height: 12px;
+          background: #00000080;
+          border-radius: 12px 12px 0 0;
+        }
+        .icon-clock.white > .clock-minute:after{background: #ffffff80;}
+        .icon-clock > .clock-hour:after{
+          width: 2px;
+          height: 8px;
+          background: #000;
+          border-radius: 8px 8px 0 0;
+        }
+        .icon-clock.white > .clock-hour:after{background: #fff;}
 
-            .icon-clock > *:after{content: ''; display: inline-block; box-shadow: 0 0 5px #00000080;}
-            .icon-clock.white > *:after{box-shadow: 0 0 5px #ffffff80;}
-            .icon-clock > .clock-minute:after{
-                width: 2px;
-                height: 12px;
-                background: #00000080;
-                border-radius: 12px 12px 0 0;
-            }
-            .icon-clock.white > .clock-minute:after{background: #ffffff80;}
-            .icon-clock > .clock-hour:after{
-                width: 2px;
-                height: 8px;
-                background: #000;
-                border-radius: 8px 8px 0 0;
-            }
-            .icon-clock.white > .clock-hour:after{background: #fff;}
+        @keyframes clock-rotate{
+          from{transform: rotate(0)}
+          to{transform: rotate(360deg)}
+        }
 
-            @keyframes clock-rotate{
-                from{transform: rotate(0)}
-                to{transform: rotate(360deg)}
-            }
+        .board-q{
+          position: fixed;
+          height: 100vh;
+          background: #fff;
+          width: 100%;
+          top: 0;
+          left: 0;
+          z-index: 2;
+          transform: scale(1);
+          transition: transform 1s, opacity 1s linear;
+        }
+        .board-q .board,
+        .board-a .board{
+          width: 600px;
+          height: 600px;
+          background: #fff;
+          margin: 20px auto;
+          display: grid;
+          padding: 5px;
+          gap: 5px;
+          box-sizing: border-box;
+          border-radius: 5px;
+        }
 
-            .board-q{
-                position: fixed;
-                height: 100vh;
-                background: #fff;
-                width: 100%;
-                top: 0;
-                left: 0;
-                z-index: 2;
-                transform: scale(1);
-                transition: transform 1s, opacity 1s linear;
-            }
-            .board-q .board,
-            .board-a .board{
-                width: 600px;
-                height: 600px;
-                background: #fff;
-                margin: 20px auto;
-                display: grid;
-                padding: 5px;
-                gap: 5px;
-                box-sizing: border-box;
-                border-radius: 5px;
-            }
+        .board-q .board > div, .board-a .board > div{
+          background: #fff; border-radius: 5px; box-shadow: inset 0 0 5px #00000080; transition: background 1s;
+        }
+        .board-a .board > div{cursor: pointer;}
+        .board-q .board > div.active{background: #f0f;}
+        .board-a .board > div.active{background: blue;}
+        .board-a .board > div.effect{
+          transition: .5s cubic-bezier(0.68, -0.55, 0.27, 1.55); box-shadow: inset 0 0 0 20px #f0f;
+          animation: blink 1s infinite linear;
+        }
 
-            .board-q .board > div, .board-a .board > div{background: #fff; border-radius: 5px; box-shadow: inset 0 0 5px #00000080; transition: background 1s;}
-            .board-a .board > div{cursor: pointer;}
-            .board-q .board > div.active{background: #f0f;}
-            .board-a .board > div.active{background: blue;}
-            .board-a .board > div.effect{
-                transition: .5s cubic-bezier(0.68, -0.55, 0.27, 1.55); box-shadow: inset 0 0 0 20px #f0f;
-                animation: blink 1s infinite linear;
-            }
+        @keyframes blink{
+          from{box-shadow: inset 0 0 0 20px #f0f;}
+          to{box-shadow: none;}
+        }
 
-            @keyframes blink{
-                from{box-shadow: inset 0 0 0 20px #f0f;}
-                to{box-shadow: none;}
-            }
+        .board-a .board > div.no-click{
+          cursor: not-allowed;
+        }
 
-            .board-a .board > div.no-click{
-                cursor: not-allowed;
-            }
+        .grid4x4{grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr);}
+        .grid5x5{grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr);}
+        .grid6x6{grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 1fr);}
+        .grid7x7{grid-template-columns: repeat(7, 1fr); grid-template-rows: repeat(7, 1fr);}
+        .grid8x8{grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr);}
 
-            .grid4x4{grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr);}
-            .grid5x5{grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr);}
-            .grid6x6{grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 1fr);}
-            .grid7x7{grid-template-columns: repeat(7, 1fr); grid-template-rows: repeat(7, 1fr);}
-            .grid8x8{grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr);}
+        .board-a{
+          width: 100%;
+          height: 100%;
+          position: relative;
+          z-index: 1;
+          background: #000;
+        }
 
-            .board-a{
-                width: 100%;
-                height: 100%;
-                position: relative;
-                z-index: 1;
-                background: #000;
-            }
+        .board-a .board{background: #000;}
 
-            .board-a .board{
-                background: #000;
-            }
+        .layer{
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 2;
+        }
 
-            .layer{
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                z-index: 2;
-            }
+        @media (max-width: 650px), (max-height: 750px){
+          .board-q .board,
+          .board-a .board{
+            width: 500px;
+            height: 500px;
+          }
 
-            @media (max-width: 650px),
-            (max-height: 750px){
-                .board-q .board,
-                .board-a .board{
-                    width: 500px;
-                    height: 500px;
-                }
-
-                .icon-clock > *{
-                    padding-top: 3px;
-                }
-            }
-            @media (max-width: 550px),
-            (max-height: 650px){
-                .board-q .board,
-                .board-a .board{
-                    width: 400px;
-                    height: 400px;
-                }
-            }
-            @media (max-width: 450px),
-            (max-height: 550px){
-                .board-q .board,
-                .board-a .board{
-                    width: 300px;
-                    height: 300px;
-                }
-            }
-        </style>
+          .icon-clock > *{
+            padding-top: 3px;
+          }
+        }
+        @media (max-width: 550px),
+        (max-height: 650px){
+          .board-q .board,
+          .board-a .board{
+              width: 400px;
+              height: 400px;
+          }
+        }
+        @media (max-width: 450px), (max-height: 550px){
+          .board-q .board,
+          .board-a .board{
+              width: 300px;
+              height: 300px;
+          }
+        }
+    </style>
 	</head>
 	<body>
         <aside id="layer" class="layer none"></aside>
@@ -281,26 +271,11 @@
                 </div>
             </header>
             <article id="sizes" class="sizes">
-                <label>
-                    <input type="radio" name="size" value="4" />
-                    <span>4 * 4</span>
-                </label>
-                <label>
-                    <input type="radio" name="size" value="5" />
-                    <span>5 * 5</span>
-                </label>
-                <label>
-                    <input type="radio" name="size" value="6" />
-                    <span>6 * 6</span>
-                </label>
-                <label>
-                    <input type="radio" name="size" value="7" />
-                    <span>7 * 7</span>
-                </label>
-                <label>
-                    <input type="radio" name="size" value="8" />
-                    <span>8 * 8</span>
-                </label>
+                <label><input type="radio" name="size" value="4" /><span>4 * 4</span></label>
+                <label><input type="radio" name="size" value="5" /><span>5 * 5</span></label>
+                <label><input type="radio" name="size" value="6" /><span>6 * 6</span></label>
+                <label><input type="radio" name="size" value="7" /><span>7 * 7</span></label>
+                <label><input type="radio" name="size" value="8" /><span>8 * 8</span></label>
             </article>
             <article class="times">
                 <label>
@@ -376,205 +351,209 @@
             </article>
             <article id="board_a" class="board grid4x4"></article>
         </section>
+        <div id="testDiv"></div>
         <script>
             window.onload = function(){
-                const size_q = document.querySelectorAll('.sizes input[name="size"]');
-                const board_q = document.querySelector('#board_q');
-                const board_a = document.querySelector('#board_a');
-                const size_a = document.querySelectorAll('.sizes [name="size2"]');
-                const layer = document.querySelector('#layer');
-                const body = document.body;
+              const size_q = document.querySelectorAll('.sizes input[name="size"]');
+              const board_q = document.querySelector('#board_q');
+              const board_a = document.querySelector('#board_a');
+              const size_a = document.querySelectorAll('.sizes [name="size2"]');
+              const layer = document.querySelector('#layer');
+              const body = document.body;
 
-                let activeBlocks = [];
+              let activeBlocks = [];
 
-                const activeCnt = {
-                    4: {mn: 5, mx: 10}, //16
-                    5: {mn: 10, mx: 15},  //25
-                    6: {mn: 15, mx: 20},  //36
-                    7: {mn: 20, mx: 30},  //49
-                    8: {mn: 30, mx: 35},  //64
-                }
+              const activeCnt = {
+                  4: {mn: 5, mx: 10}, //16
+                  5: {mn: 10, mx: 15},  //25
+                  6: {mn: 15, mx: 20},  //36
+                  7: {mn: 20, mx: 30},  //49
+                  8: {mn: 30, mx: 35},  //64
+              }
 
-                const sizeClasses = ['grid4x4', 'grid5x5', 'grid6x6', 'grid7x7', 'grid8x8'];
+              const sizeClasses = ['grid4x4', 'grid5x5', 'grid6x6', 'grid7x7', 'grid8x8'];
 
-                //세션 불러오기
-                const prevMemoryTime = +sessionStorage.getItem('memory-time') || 3;
-                const prevMemorySize = +sessionStorage.getItem('memory-size') || 4;
-                document.querySelector('#count').value = prevMemoryTime;
-                document.querySelector('#sizes input[value="' + prevMemorySize + '"]').checked = true;
+              //세션 불러오기
+              const prevMemoryTime = +sessionStorage.getItem('memory-time') || 3;
+              const prevMemorySize = +sessionStorage.getItem('memory-size') || 4;
+              document.querySelector('#count').value = prevMemoryTime;
+              document.querySelector('#sizes input[value="' + prevMemorySize + '"]').checked = true;
 
-                size_q.forEach((el) => {
-                    const val = el.value;
-                    const className = 'grid' + val + 'x' + val;
-                    el.addEventListener('change', function(){
-                        sizeClasses.forEach((classNm) => {
-                            board_q.classList.remove(classNm);
-                            board_a.classList.remove(classNm);
-                        });
+              let clickCnt = 0;
 
-                        size_a.forEach((input) => {
-                            input.checked = false;
-                            if(input.value == val) input.checked = true;
-                        })
+              size_q.forEach((el) => {
+                  const val = el.value;
+                  const className = 'grid' + val + 'x' + val;
+                  el.addEventListener('change', function(){
+                      sizeClasses.forEach((classNm) => {
+                          board_q.classList.remove(classNm);
+                          board_a.classList.remove(classNm);
+                      });
 
-                        board_q.innerHTML = '';
-                        board_q.classList.add(className);
-                        board_a.innerHTML = '';
-                        board_a.classList.add(className);
+                      size_a.forEach((input) => {
+                          input.checked = false;
+                          if(input.value == val) input.checked = true;
+                      })
 
-                        for(let i = 0; i < val * val; i++){
-                            const block = document.createElement('DIV');
-                            const block2 = document.createElement('DIV');
-                            block.setAttribute('data-idx', i);
-                            block2.setAttribute('data-idx', i);
+                      board_q.innerHTML = '';
+                      board_q.classList.add(className);
+                      board_a.innerHTML = '';
+                      board_a.classList.add(className);
 
-                            block2.addEventListener('click', () => {
-                                if(block2.classList.contains('no-click')) return;
-                                block2.classList.toggle('active');
-                            });
+                      for(let i = 0; i < val * val; i++){
+                          const block = document.createElement('DIV');
+                          const block2 = document.createElement('DIV');
+                          block.setAttribute('data-idx', i);
+                          block2.setAttribute('data-idx', i);
 
-                            board_q.appendChild(block);
-                            board_a.appendChild(block2);
-                        }
-                    })
+                          block2.addEventListener('click', () => {
+                              if(block2.classList.contains('no-click')) return;
+                              document.querySelector('#testDiv').innerText += clickCnt++ + '/';
+                              block2.classList.toggle('active');
+                          });
 
-                    if(val == prevMemorySize){
-                        let event = new Event('change');
-                        el.dispatchEvent(event);
-                    }
-                });
+                          board_q.appendChild(block);
+                          board_a.appendChild(block2);
+                      }
+                  })
 
-                const countDown = document.querySelector('#count');
-                countDown.addEventListener('change', () => {
-                    const countDown2 = document.querySelector('#count2');
-                    countDown2.value = countDown.value;
-                });
+                  if(val == prevMemorySize){
+                      let event = new Event('change');
+                      el.dispatchEvent(event);
+                  }
+              });
 
-                const countDownChange = new Event('change');
-                countDown.dispatchEvent(countDownChange);
+              const countDown = document.querySelector('#count');
+              countDown.addEventListener('change', () => {
+                  const countDown2 = document.querySelector('#count2');
+                  countDown2.value = countDown.value;
+              });
 
-                const startBtn = document.querySelector('#btn_start');
-                startBtn.addEventListener('click', () => {
-                    if(startBtn.classList.contains('no-click')) return;
-                    const time = document.querySelector('#count');
-                    const sizes = document.querySelectorAll('#sizes input');
-                    const selectSize = document.querySelector('#sizes input:checked');
-                    const questBoard = document.querySelector('#questBoard');
-                    const answerBoard = document.querySelector('#answerBoard');
+              const countDownChange = new Event('change');
+              countDown.dispatchEvent(countDownChange);
 
-                    startBtn.classList.add('no-click');
-                    time.setAttribute('disabled', true);
-                    sizes.forEach((size) => {size.setAttribute('disabled', true);});
+              const startBtn = document.querySelector('#btn_start');
+              startBtn.addEventListener('click', () => {
+                  if(startBtn.classList.contains('no-click')) return;
+                  const time = document.querySelector('#count');
+                  const sizes = document.querySelectorAll('#sizes input');
+                  const selectSize = document.querySelector('#sizes input:checked');
+                  const questBoard = document.querySelector('#questBoard');
+                  const answerBoard = document.querySelector('#answerBoard');
 
-                    //세션저장
-                    sessionStorage.setItem('memory-time', time.value);
-                    sessionStorage.setItem('memory-size', selectSize.value);
+                  startBtn.classList.add('no-click');
+                  time.setAttribute('disabled', true);
+                  sizes.forEach((size) => {size.setAttribute('disabled', true);});
 
-                    gameStart();
-                    setTimeout(() => {
-                        questBoard.style.transform = 'scale(2)';
-                        questBoard.style.opacity = '0';
-                        setTimeout(() => {questBoard.style.zIndex = 0}, (1000 + 10));
-                    }, time.value * 1000);
-                });
+                  //세션저장
+                  sessionStorage.setItem('memory-time', time.value);
+                  sessionStorage.setItem('memory-size', selectSize.value);
 
-                const initBtns = document.querySelectorAll('[id^="btn_init"]');
-                initBtns.forEach((btn) => {
-                    btn.addEventListener('click', () => {
-                        const id = btn.getAttribute('id');
-                        const isConfirm = id === 'btn_init1' ? true : confirm('초기화하시겠습니까?');
-                        if(isConfirm){
-                            window.scrollTo(0, 0);
-                            location.reload();
-                        }
-                    });
-                })
+                  gameStart();
+                  setTimeout(() => {
+                      questBoard.style.transform = 'scale(2)';
+                      questBoard.style.opacity = '0';
+                      setTimeout(() => {questBoard.style.zIndex = 0}, (1000 + 10));
+                  }, time.value * 1000);
+              });
 
-                const submitBtn = document.querySelector('#btn_submit');
-                submitBtn.addEventListener('click', () => {
-                    if(submitBtn.classList.contains('no-click')) return;
+              const initBtns = document.querySelectorAll('[id^="btn_init"]');
+              initBtns.forEach((btn) => {
+                  btn.addEventListener('click', () => {
+                      const id = btn.getAttribute('id');
+                      const isConfirm = id === 'btn_init1' ? true : confirm('초기화하시겠습니까?');
+                      if(isConfirm){
+                          window.scrollTo(0, 0);
+                          location.reload();
+                      }
+                  });
+              })
 
-                    const answerIdx = [];
-                    const answerBlock = document.querySelectorAll('#board_a > div.active'); //내가 선택한 블럭
-                    const answerAllBlock = document.querySelectorAll('#board_a > div'); //모든 블럭
+              const submitBtn = document.querySelector('#btn_submit');
+              submitBtn.addEventListener('click', () => {
+                  if(submitBtn.classList.contains('no-click')) return;
 
-                    answerAllBlock.forEach((block) => {block.classList.add('no-click');});  //모든블럭 클릭 방지
-                    submitBtn.classList.add('no-click');
-                    
-                    answerBlock.forEach((block) => {
-                        const val = block.getAttribute('data-idx');
-                        answerIdx.push(+val);
-                    });
+                  const answerIdx = [];
+                  const answerBlock = document.querySelectorAll('#board_a > div.active'); //내가 선택한 블럭
+                  const answerAllBlock = document.querySelectorAll('#board_a > div'); //모든 블럭
 
-                    activeBlocks.forEach((blockIdx) => {    //정답블럭
-                        const activeBlock = document.querySelector('#board_a > div[data-idx="' + blockIdx + '"]');
-                        activeBlock.classList.add('effect');
-                    })
-                    
-                    const matchArr = activeBlocks.filter(a => answerIdx.includes(a));
-                    matchArr.forEach((matchedIdx) => {
-                        const activeBlock = document.querySelector('#board_a > div[data-idx="' + matchedIdx + '"]');
-                    })
+                  answerAllBlock.forEach((block) => {block.classList.add('no-click');});  //모든블럭 클릭 방지
+                  submitBtn.classList.add('no-click');
+                  
+                  answerBlock.forEach((block) => {
+                      const val = block.getAttribute('data-idx');
+                      answerIdx.push(+val);
+                  });
 
-                    if(matchArr.length == activeBlocks.length  && activeBlocks.length == answerIdx.length){
-                        setTimeout(function(){
-                            if(confirm('축하합니다.\n다 맞추셨습니다.\n초기화할까요?')){
-                                window.scrollTo(0, 0);
-                                location.reload();
-                            };
-                        }, 1000)
-                    }
-                });
-                
-                function scrollAnimate(dir){
-                    const timeout = setTimeout(function(){
-                        const dir2 = dir == 'up' ? -1 : 1;
-                        const thisScroll = window.scrollY;
-                        window.scrollTo(0, (thisScroll + (dir2 * 5)));
-                        const afterScroll = window.scrollY;
-                        if(Math.ceil(afterScroll) < document.body.scrollHeight){
-                            return scrollAnimate(dir);
-                        }else{
-                            clearTimeout(timeout)
-                            body.style.overflow = 'hidden';
-                            layer.classList.add('none');
-                        };
-                    });
-                }
+                  activeBlocks.forEach((blockIdx) => {    //정답블럭
+                      const activeBlock = document.querySelector('#board_a > div[data-idx="' + blockIdx + '"]');
+                      activeBlock.classList.add('effect');
+                  })
+                  
+                  const matchArr = activeBlocks.filter(a => answerIdx.includes(a));
+                  matchArr.forEach((matchedIdx) => {
+                      const activeBlock = document.querySelector('#board_a > div[data-idx="' + matchedIdx + '"]');
+                  })
 
-                function gameStart() {
-                    const size = document.querySelector('#sizes input[name="size"]:checked').value;
-                    const activeCnt2 = getRandomBetween(activeCnt[size].mn, activeCnt[size].mx);
+                  if(matchArr.length == activeBlocks.length  && activeBlocks.length == answerIdx.length){
+                      setTimeout(function(){
+                          if(confirm('축하합니다.\n다 맞추셨습니다.\n초기화할까요?')){
+                              window.scrollTo(0, 0);
+                              location.reload();
+                          };
+                      }, 1000)
+                  }
+              });
+              
+              function scrollAnimate(dir){
+                  const timeout = setTimeout(function(){
+                      const dir2 = dir == 'up' ? -1 : 1;
+                      const thisScroll = window.scrollY;
+                      window.scrollTo(0, (thisScroll + (dir2 * 5)));
+                      const afterScroll = window.scrollY;
+                      if(Math.ceil(afterScroll) < document.body.scrollHeight){
+                          return scrollAnimate(dir);
+                      }else{
+                          clearTimeout(timeout)
+                          body.style.overflow = 'hidden';
+                          layer.classList.add('none');
+                      };
+                  });
+              }
 
-                    const allBlocks = [];
-                    for(let i = 0; i < size**2; i++){
-                        allBlocks.push(i);
-                    }
+              function gameStart() {
+                  const size = document.querySelector('#sizes input[name="size"]:checked').value;
+                  const activeCnt2 = getRandomBetween(activeCnt[size].mn, activeCnt[size].mx);
 
-                    const activeBlocks2 = shuffleArr(allBlocks, activeCnt2);
-                    activeBlocks = activeBlocks2;
-                    
-                    activeBlocks2.forEach((acitveBlock) => {
-                        const target = document.querySelector('#board_q > div[data-idx="' + acitveBlock + '"]');
-                        target.classList.add('active');
-                    })
-                }
+                  const allBlocks = [];
+                  for(let i = 0; i < size**2; i++){
+                      allBlocks.push(i);
+                  }
 
-                function getRandomBetween (mn, mx){
-                    if(isNaN(mn) || isNaN(mx) || mn >= mx) return;
-                    return Math.floor(Math.random() * (mx - mn + 1)) + mn;
-                }
+                  const activeBlocks2 = shuffleArr(allBlocks, activeCnt2);
+                  activeBlocks = activeBlocks2;
+                  
+                  activeBlocks2.forEach((acitveBlock) => {
+                      const target = document.querySelector('#board_q > div[data-idx="' + acitveBlock + '"]');
+                      target.classList.add('active');
+                  })
+              }
 
-                function shuffleArr (arr, cnt){
-                    const forCnt = cnt || arr.length;
-                    const tmpArr = [];
-                    for(let i = 0; i < forCnt; i++){
-                        const rdmIdx = getRandomBetween(0, arr.length - 1);
-                        tmpArr.push(arr.splice(rdmIdx, 1)[0]);
-                    }
+              function getRandomBetween (mn, mx){
+                  if(isNaN(mn) || isNaN(mx) || mn >= mx) return;
+                  return Math.floor(Math.random() * (mx - mn + 1)) + mn;
+              }
 
-                    return tmpArr;
-                }
+              function shuffleArr (arr, cnt){
+                  const forCnt = cnt || arr.length;
+                  const tmpArr = [];
+                  for(let i = 0; i < forCnt; i++){
+                      const rdmIdx = getRandomBetween(0, arr.length - 1);
+                      tmpArr.push(arr.splice(rdmIdx, 1)[0]);
+                  }
+
+                  return tmpArr;
+              }
             }
         </script>
 		
