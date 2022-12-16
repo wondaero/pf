@@ -258,6 +258,8 @@
               height: 300px;
           }
         }
+
+        #testDiv{position: fixed; bottom: 0; left: 0; right: 0; background: #f00; color: #fff; z-index: 1; word-break: break-word;}
     </style>
 	</head>
 	<body>
@@ -351,7 +353,7 @@
             </article>
             <article id="board_a" class="board grid4x4"></article>
         </section>
-        <div id="testDiv" style="color: #fff;"></div>
+        <div id="testDiv"></div>
         <script>
             window.onload = function(){
               const size_q = document.querySelectorAll('.sizes input[name="size"]');
